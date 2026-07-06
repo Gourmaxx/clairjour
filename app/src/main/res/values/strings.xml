@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Clairjour</string>
+    <string name="app_tagline">One clear day at a time</string>
+
+    <!-- Common -->
+    <string name="action_continue">Continue</string>
+    <string name="action_next">Next</string>
+    <string name="action_back">Back</string>
+    <string name="action_save">Save</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_confirm">Confirm</string>
+    <string name="action_add">Add</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_done">Done</string>
+    <string name="action_close">Close</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_welcome_title">Welcome to Clairjour</string>
+    <string name="onboarding_welcome_body">A calm space to track your sober days, celebrate your milestones, and stay anchored — one day at a time.</string>
+    <string name="onboarding_language_title">Language</string>
+    <string name="onboarding_language_body">Pick the language you\'d like the app in. You can change it anytime.</string>
+    <string name="onboarding_addiction_title">What are you tracking?</string>
+    <string name="onboarding_addiction_body">Add a first area you want to stay sober from. You can add more later.</string>
+    <string name="onboarding_notif_title">Daily reminders</string>
+    <string name="onboarding_notif_body">A gentle reminder in the morning and a check-in at night, to keep the habit going.</string>
+    <string name="onboarding_notif_enable">Enable notifications</string>
+    <string name="onboarding_notif_skip">Skip for now</string>
+    <string name="onboarding_finish">Start my journey</string>
+
+    <!-- Home -->
+    <string name="home_days_label">days sober</string>
+    <string name="home_day_label">day sober</string>
+    <string name="home_next_milestone">Next milestone: %1$s in %2$d days</string>
+    <string name="home_pledge_cta">Pledge for today</string>
+    <string name="home_pledge_done">Pledge kept ✓</string>
+    <string name="home_quote_of_day">Thought of the day</string>
+    <string name="home_journal_write">Write today\'s entry</string>
+    <string name="home_journal_edit">Edit today\'s entry</string>
+    <string name="home_pledge_modal_title">Today\'s pledge</string>
+    <string name="home_pledge_modal_body">I commit to staying sober today. Just for today.</string>
+
+    <!-- Addictions types -->
+    <string name="addiction_type_alcohol">Alcohol</string>
+    <string name="addiction_type_tobacco">Tobacco</string>
+    <string name="addiction_type_drug">Drug</string>
+    <string name="addiction_type_sugar">Sugar</string>
+    <string name="addiction_type_screen">Screen time</string>
+    <string name="addiction_type_gambling">Gambling</string>
+    <string name="addiction_type_porn">Pornography</string>
+    <string name="addiction_type_other">Other</string>
+
+    <!-- Addiction edit -->
+    <string name="addiction_edit_name">Custom name</string>
+    <string name="addiction_edit_start">Sober since</string>
+    <string name="addiction_edit_cost">Daily cost (€)</string>
+    <string name="addiction_edit_units">Units per day</string>
+    <string name="addiction_edit_units_label">Unit label (e.g. cigarettes)</string>
+
+    <!-- Addiction detail -->
+    <string name="detail_saved">Saved</string>
+    <string name="detail_units_avoided">Units avoided</string>
+    <string name="detail_milestones">Milestones</string>
+    <string name="detail_report_relapse">Report a relapse</string>
+    <string name="detail_relapse_title">Report a relapse</string>
+    <string name="detail_relapse_body">Resetting the counter is a moment to acknowledge, not to judge. Your previous streak stays saved in your history.</string>
+    <string name="detail_relapse_note">A note for your future self (optional)</string>
+
+    <!-- Journal -->
+    <string name="journal_title">Journal</string>
+    <string name="journal_empty">Nothing written yet. Tap + to add your first entry.</string>
+    <string name="journal_mood">Mood</string>
+    <string name="journal_notes">Notes</string>
+    <string name="journal_triggers">Triggers</string>
+    <string name="journal_gratitude">Grateful for</string>
+    <string name="journal_cravings">Had cravings today</string>
+    <string name="journal_search">Search</string>
+
+    <!-- Stats -->
+    <string name="stats_title">Statistics</string>
+    <string name="stats_total_days">Total sober days</string>
+    <string name="stats_total_saved">Total saved</string>
+    <string name="stats_milestones_reached">Milestones reached</string>
+    <string name="stats_mood_over_time">Mood over time</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_theme">Theme</string>
+    <string name="settings_theme_system">System</string>
+    <string name="settings_theme_light">Light</string>
+    <string name="settings_theme_dark">Dark</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_notif_pledge">Morning pledge reminder</string>
+    <string name="settings_notif_journal">Evening journal reminder</string>
+    <string name="settings_backup">Backup</string>
+    <string name="settings_backup_export">Export to file</string>
+    <string name="settings_backup_import">Import from file</string>
+    <string name="settings_addictions">Areas tracked</string>
+    <string name="settings_about">About</string>
+
+    <!-- Notifications -->
+    <string name="notif_channel_pledge_name">Morning pledge</string>
+    <string name="notif_channel_pledge_desc">A gentle reminder in the morning to commit to today.</string>
+    <string name="notif_channel_journal_name">Journal reminder</string>
+    <string name="notif_channel_journal_desc">A reminder in the evening to write in your journal.</string>
+    <string name="notif_channel_milestone_name">Milestones</string>
+    <string name="notif_channel_milestone_desc">Celebrating milestones you reach.</string>
+    <string name="notif_pledge_title">A new clear day</string>
+    <string name="notif_pledge_body">Take a moment to commit to today.</string>
+    <string name="notif_journal_title">How was your day?</string>
+    <string name="notif_journal_body">A few words in your journal — even short ones count.</string>
+    <string name="notif_milestone_title">Milestone reached</string>
+    <string name="notif_milestone_body">%1$d days sober from %2$s. Keep going.</string>
+
+    <!-- Milestones -->
+    <string name="milestone_1d">1 day</string>
+    <string name="milestone_3d">3 days</string>
+    <string name="milestone_7d">1 week</string>
+    <string name="milestone_14d">2 weeks</string>
+    <string name="milestone_30d">1 month</string>
+    <string name="milestone_60d">2 months</string>
+    <string name="milestone_90d">3 months</string>
+    <string name="milestone_180d">6 months</string>
+    <string name="milestone_365d">1 year</string>
+    <string name="milestone_730d">2 years</string>
+    <string name="milestone_1095d">3 years</string>
+    <string name="milestone_1825d">5 years</string>
+    <string name="milestone_3650d">10 years</string>
+
+    <!-- Bottom nav -->
+    <string name="nav_home">Home</string>
+    <string name="nav_journal">Journal</string>
+    <string name="nav_stats">Stats</string>
+    <string name="nav_settings">Settings</string>
+</resources>

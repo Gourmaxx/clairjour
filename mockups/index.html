@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mockups Branding — App Sobriété</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=DM+Serif+Display&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: #0d0d10;
+    color: #e5e5e5;
+    font-family: 'Inter', -apple-system, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .page {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 48px 32px 96px;
+  }
+
+  header.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 56px;
+    border-bottom: 1px solid #1f1f24;
+    padding-bottom: 32px;
+  }
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-size: 42px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .hero p {
+    color: #8a8a92;
+    font-size: 14px;
+    margin-top: 12px;
+    max-width: 480px;
+    line-height: 1.5;
+  }
+  .hero .meta {
+    text-align: right;
+    color: #6a6a72;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+  @media (max-width: 1100px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+
+  .theme-card {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .theme-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #1f1f24;
+  }
+  .theme-header h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    font-weight: 600;
+  }
+  .theme-header .n {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #6a6a72;
+    letter-spacing: 0.2em;
+  }
+
+  .tagline {
+    font-size: 13px;
+    color: #a0a0a8;
+    font-style: italic;
+    margin-top: -8px;
+  }
+
+  /* Phone frame */
+  .phone {
+    width: 100%;
+    aspect-ratio: 9 / 19.5;
+    border-radius: 36px;
+    padding: 14px;
+    background: linear-gradient(155deg, #2a2a30, #16161a);
+    box-shadow: 0 30px 80px -20px rgba(0,0,0,0.7), 0 0 0 1px #2a2a30;
+    position: relative;
+  }
+  .phone::before {
+    content: '';
+    position: absolute;
+    top: 22px; left: 50%;
+    transform: translateX(-50%);
+    width: 90px; height: 22px;
+    background: #0d0d10;
+    border-radius: 12px;
+    z-index: 2;
+  }
+  .screen {
+    width: 100%;
+    height: 100%;
+    border-radius: 26px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  /* Palette swatches */
+  .palette {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .swatch {
+    aspect-ratio: 1;
+    border-radius: 10px;
+    display: flex;
+    align-items: flex-end;
+    padding: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.05em;
+    position: relative;
+    overflow: hidden;
+  }
+  .swatch::after {
+    content: attr(data-hex);
+    color: inherit;
+    opacity: 0.9;
+  }
+
+  .meta-row {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: #6a6a72;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    padding-top: 4px;
+  }
+
+  /* =============== THEME 1: CLAIRJOUR =============== */
+  .clairjour {
+    background: linear-gradient(180deg, #1E3A5F 0%, #14283F 100%);
+    font-family: 'Fraunces', serif;
+    color: #F5F1E8;
+    padding: 56px 24px 24px;
+  }
+  .clairjour .status {
+    display: flex; justify-content: space-between;
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    opacity: 0.6;
+    letter-spacing: 0.1em;
+  }
+  .clairjour .brand {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #D4A857;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+  }
+  .clairjour .sun {
+    width: 60px; height: 60px;
+    margin: 24px auto 8px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 60%, #D4A857 0%, #D4A857 40%, transparent 41%);
+    position: relative;
+  }
+  .clairjour .sun::after {
+    content: '';
+    position: absolute;
+    bottom: 18px; left: -8px; right: -8px;
+    height: 1px;
+    background: #D4A857;
+  }
+  .clairjour .day-count {
+    text-align: center;
+    font-size: 82px;
+    line-height: 1;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    margin-top: 16px;
+  }
+  .clairjour .day-label {
+    text-align: center;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    opacity: 0.7;
+    font-family: 'Inter', sans-serif;
+    margin-top: 4px;
+  }
+  .clairjour .quote {
+    margin: 28px 16px 0;
+    font-style: italic;
+    font-size: 13px;
+    text-align: center;
+    opacity: 0.85;
+    line-height: 1.5;
+    border-top: 1px solid rgba(212,168,87,0.3);
+    padding-top: 20px;
+  }
+  .clairjour .pledge {
+    margin: auto 0 16px;
+    background: #D4A857;
+    color: #14283F;
+    padding: 14px;
+    border-radius: 4px;
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* =============== THEME 2: CORDÉE =============== */
+  .cordee {
+    background: #FAF6EE;
+    color: #1F2D25;
+    padding: 56px 22px 24px;
+    font-family: 'Inter', sans-serif;
+  }
+  .cordee .status {
+    display: flex; justify-content: space-between;
+    font-size: 10px;
+    color: #1F2D25;
+    opacity: 0.5;
+    letter-spacing: 0.1em;
+  }
+  .cordee .brand-row {
+    display: flex; align-items: center; gap: 8px;
+    margin-top: 22px;
+    font-weight: 600;
+    font-size: 16px;
+    color: #2D5A3D;
+  }
+  .cordee .brand-logo {
+    width: 22px; height: 22px;
+    background: #2D5A3D;
+    clip-path: polygon(50% 15%, 90% 85%, 10% 85%);
+  }
+  .cordee .card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 20px 18px;
+    margin-top: 20px;
+    box-shadow: 0 2px 0 rgba(45,90,61,0.06);
+  }
+  .cordee .card-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #2D5A3D;
+    font-weight: 600;
+  }
+  .cordee .card-big {
+    font-family: 'DM Serif Display', serif;
+    font-size: 56px;
+    line-height: 1;
+    color: #1F2D25;
+    margin-top: 6px;
+  }
+  .cordee .card-sub {
+    font-size: 12px;
+    color: #5a6a5f;
+    margin-top: 6px;
+  }
+  .cordee .steps {
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .cordee .step {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    border: 1.5px solid #2D5A3D;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px;
+    color: #2D5A3D;
+    background: #fff;
+  }
+  .cordee .step.done { background: #E8B04B; border-color: #E8B04B; color: #1F2D25; }
+  .cordee .line {
+    flex: 1; height: 1.5px;
+    background: repeating-linear-gradient(90deg, #2D5A3D 0 4px, transparent 4px 8px);
+    margin: 0 -3px;
+  }
+  .cordee .journal {
+    background: #2D5A3D;
+    color: #FAF6EE;
+    border-radius: 20px;
+    padding: 16px;
+    margin-top: 14px;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+  .cordee .journal-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    margin-bottom: 8px;
+    color: #E8B04B;
+  }
+  .cordee .nav {
+    margin: auto -22px -24px;
+    display: flex;
+    justify-content: space-around;
+    background: #fff;
+    padding: 14px 0 22px;
+    border-top: 1px solid #eae4d5;
+  }
+  .cordee .nav-item {
+    font-size: 10px;
+    color: #5a6a5f;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .cordee .nav-item.active { color: #2D5A3D; font-weight: 700; }
+
+  /* =============== THEME 3: CAP =============== */
+  .cap {
+    background: #FFFBF5;
+    color: #1A1A1A;
+    padding: 56px 22px 24px;
+    font-family: 'Space Grotesk', sans-serif;
+    display: flex;
+    flex-direction: column;
+  }
+  .cap .status {
+    display: flex; justify-content: space-between;
+    font-size: 10px;
+    opacity: 0.5;
+    letter-spacing: 0.1em;
+  }
+  .cap .brand-row {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 22px;
+  }
+  .cap .brand {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .cap .brand::after {
+    content: '.';
+    color: #E97F3A;
+  }
+  .cap .arrow {
+    width: 28px; height: 28px;
+    background: #2E3440;
+    color: #FFFBF5;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    transform: rotate(-45deg);
+  }
+  .cap .hero-block {
+    background: #E97F3A;
+    border-radius: 24px;
+    padding: 24px 20px;
+    margin-top: 22px;
+    color: #FFFBF5;
+    position: relative;
+    overflow: hidden;
+  }
+  .cap .hero-block::after {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+  }
+  .cap .hero-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    opacity: 0.85;
+    font-weight: 600;
+  }
+  .cap .hero-count {
+    font-size: 92px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.05em;
+    margin-top: 8px;
+  }
+  .cap .hero-sub {
+    font-size: 13px;
+    margin-top: 4px;
+    opacity: 0.9;
+  }
+  .cap .stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 14px;
+  }
+  .cap .stat {
+    background: #2E3440;
+    color: #FFFBF5;
+    border-radius: 16px;
+    padding: 14px;
+  }
+  .cap .stat-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+  .cap .stat-val {
+    font-size: 22px;
+    font-weight: 700;
+    margin-top: 4px;
+  }
+  .cap .cta {
+    margin-top: auto;
+    background: #1A1A1A;
+    color: #FFFBF5;
+    border-radius: 999px;
+    padding: 16px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+  }
+  .cap .cta::after {
+    content: ' →';
+    color: #E97F3A;
+  }
+
+  /* Footer */
+  footer {
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid #1f1f24;
+    color: #5a5a62;
+    font-size: 12px;
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="hero">
+    <div>
+      <h1>Trois directions</h1>
+      <p>Aperçu des trois univers proposés pour ton app de suivi de sobriété. Choisis celui qui te parle, on part là-dessus.</p>
+    </div>
+    <div class="meta">
+      Mockup · v0.1<br />
+      2026-07-05
+    </div>
+  </header>
+
+  <div class="grid">
+
+    <!-- ============ CLAIRJOUR ============ -->
+    <div class="theme-card">
+      <div class="theme-header">
+        <h2>Clairjour</h2>
+        <span class="n">OPT · 01</span>
+      </div>
+      <div class="tagline">« Un jour clair à la fois »</div>
+
+      <div class="phone">
+        <div class="screen clairjour">
+          <div class="status"><span>9:41</span><span>●●● ▲ 100%</span></div>
+          <div class="brand">CLAIRJOUR</div>
+          <div class="sun"></div>
+          <div class="day-count">147</div>
+          <div class="day-label">Jours · Alcool</div>
+          <div class="quote">"La sérénité vient de la constance, pas de l'exploit."</div>
+          <div class="pledge">S'engager pour aujourd'hui</div>
+        </div>
+      </div>
+
+      <div class="palette">
+        <div class="swatch" style="background:#1E3A5F; color:#F5F1E8" data-hex="#1E3A5F"></div>
+        <div class="swatch" style="background:#D4A857; color:#14283F" data-hex="#D4A857"></div>
+        <div class="swatch" style="background:#F5F1E8; color:#1E3A5F" data-hex="#F5F1E8"></div>
+        <div class="swatch" style="background:#2C2C2C; color:#F5F1E8" data-hex="#2C2C2C"></div>
+      </div>
+      <div class="meta-row">
+        <span>Serif · Fraunces</span>
+        <span>Ton : contemplatif</span>
+      </div>
+    </div>
+
+    <!-- ============ CORDÉE ============ -->
+    <div class="theme-card">
+      <div class="theme-header">
+        <h2>Cordée</h2>
+        <span class="n">OPT · 02</span>
+      </div>
+      <div class="tagline">« Chaque pas compte »</div>
+
+      <div class="phone">
+        <div class="screen cordee">
+          <div class="status"><span>9:41</span><span>●●● ▲ 100%</span></div>
+          <div class="brand-row">
+            <div class="brand-logo"></div>
+            <span>Cordée</span>
+          </div>
+
+          <div class="card">
+            <div class="card-label">Alcool · en cours</div>
+            <div class="card-big">147 <span style="font-size:16px; font-family:Inter; color:#5a6a5f">jours</span></div>
+            <div class="card-sub">Prochain jalon : 6 mois · dans 35 jours</div>
+            <div class="steps">
+              <div class="step done">7j</div>
+              <div class="line"></div>
+              <div class="step done">1m</div>
+              <div class="line"></div>
+              <div class="step done">3m</div>
+              <div class="line"></div>
+              <div class="step">6m</div>
+              <div class="line"></div>
+              <div class="step">1a</div>
+            </div>
+          </div>
+
+          <div class="journal">
+            <div class="journal-title">Carnet du jour</div>
+            Note trois choses qui t'ont porté aujourd'hui.
+          </div>
+
+          <div class="nav">
+            <div class="nav-item active">Accueil</div>
+            <div class="nav-item">Journal</div>
+            <div class="nav-item">Stats</div>
+            <div class="nav-item">Profil</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="palette">
+        <div class="swatch" style="background:#2D5A3D; color:#FAF6EE" data-hex="#2D5A3D"></div>
+        <div class="swatch" style="background:#E8B04B; color:#1F2D25" data-hex="#E8B04B"></div>
+        <div class="swatch" style="background:#FAF6EE; color:#2D5A3D" data-hex="#FAF6EE"></div>
+        <div class="swatch" style="background:#1F2D25; color:#FAF6EE" data-hex="#1F2D25"></div>
+      </div>
+      <div class="meta-row">
+        <span>Serif + Sans · DM Serif / Inter</span>
+        <span>Ton : chaleureux</span>
+      </div>
+    </div>
+
+    <!-- ============ CAP ============ -->
+    <div class="theme-card">
+      <div class="theme-header">
+        <h2>Cap</h2>
+        <span class="n">OPT · 03</span>
+      </div>
+      <div class="tagline">« Garde le cap, jour après jour »</div>
+
+      <div class="phone">
+        <div class="screen cap">
+          <div class="status"><span>9:41</span><span>●●● ▲ 100%</span></div>
+          <div class="brand-row">
+            <div class="brand">Cap</div>
+            <div class="arrow">↑</div>
+          </div>
+
+          <div class="hero-block">
+            <div class="hero-label">Alcool · sobre depuis</div>
+            <div class="hero-count">147</div>
+            <div class="hero-sub">jours consécutifs</div>
+          </div>
+
+          <div class="stats">
+            <div class="stat">
+              <div class="stat-label">Économisé</div>
+              <div class="stat-val">1 470 €</div>
+            </div>
+            <div class="stat">
+              <div class="stat-label">Prochain</div>
+              <div class="stat-val">6 mois</div>
+            </div>
+          </div>
+
+          <div class="cta">S'engager pour aujourd'hui</div>
+        </div>
+      </div>
+
+      <div class="palette">
+        <div class="swatch" style="background:#E97F3A; color:#FFFBF5" data-hex="#E97F3A"></div>
+        <div class="swatch" style="background:#2E3440; color:#FFFBF5" data-hex="#2E3440"></div>
+        <div class="swatch" style="background:#FFFBF5; color:#2E3440" data-hex="#FFFBF5"></div>
+        <div class="swatch" style="background:#1A1A1A; color:#E97F3A" data-hex="#1A1A1A"></div>
+      </div>
+      <div class="meta-row">
+        <span>Sans · Space Grotesk</span>
+        <span>Ton : énergique</span>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <span>mockups / branding preview</span>
+    <span>sobriety-app · 2026</span>
+  </footer>
+
+</div>
+
+</body>
+</html>
