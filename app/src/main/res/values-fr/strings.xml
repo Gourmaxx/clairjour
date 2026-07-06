@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Clairjour</string>
+    <string name="app_tagline">Un jour clair à la fois</string>
+
+    <string name="action_continue">Continuer</string>
+    <string name="action_next">Suivant</string>
+    <string name="action_back">Retour</string>
+    <string name="action_save">Enregistrer</string>
+    <string name="action_cancel">Annuler</string>
+    <string name="action_delete">Supprimer</string>
+    <string name="action_confirm">Confirmer</string>
+    <string name="action_add">Ajouter</string>
+    <string name="action_edit">Modifier</string>
+    <string name="action_done">Terminé</string>
+    <string name="action_close">Fermer</string>
+
+    <string name="onboarding_welcome_title">Bienvenue sur Clairjour</string>
+    <string name="onboarding_welcome_body">Un espace calme pour suivre tes jours de sobriété, célébrer tes jalons et rester ancré — un jour à la fois.</string>
+    <string name="onboarding_language_title">Langue</string>
+    <string name="onboarding_language_body">Choisis la langue de l\'application. Tu pourras la changer à tout moment.</string>
+    <string name="onboarding_addiction_title">Que veux-tu suivre ?</string>
+    <string name="onboarding_addiction_body">Ajoute un premier domaine dans lequel tu veux rester sobre. Tu pourras en ajouter d\'autres plus tard.</string>
+    <string name="onboarding_notif_title">Rappels quotidiens</string>
+    <string name="onboarding_notif_body">Un rappel doux le matin et un point le soir, pour tenir l\'habitude.</string>
+    <string name="onboarding_notif_enable">Activer les notifications</string>
+    <string name="onboarding_notif_skip">Plus tard</string>
+    <string name="onboarding_finish">Commencer</string>
+
+    <string name="home_days_label">jours de sobriété</string>
+    <string name="home_day_label">jour de sobriété</string>
+    <string name="home_next_milestone">Prochain jalon : %1$s dans %2$d jours</string>
+    <string name="home_pledge_cta">S\'engager pour aujourd\'hui</string>
+    <string name="home_pledge_done">Engagement pris ✓</string>
+    <string name="home_quote_of_day">Pensée du jour</string>
+    <string name="home_journal_write">Écrire l\'entrée du jour</string>
+    <string name="home_journal_edit">Modifier l\'entrée du jour</string>
+    <string name="home_pledge_modal_title">Engagement du jour</string>
+    <string name="home_pledge_modal_body">Je m\'engage à rester sobre aujourd\'hui. Juste pour aujourd\'hui.</string>
+
+    <string name="addiction_type_alcohol">Alcool</string>
+    <string name="addiction_type_tobacco">Tabac</string>
+    <string name="addiction_type_drug">Drogue</string>
+    <string name="addiction_type_sugar">Sucre</string>
+    <string name="addiction_type_screen">Écrans</string>
+    <string name="addiction_type_gambling">Jeu</string>
+    <string name="addiction_type_porn">Pornographie</string>
+    <string name="addiction_type_other">Autre</string>
+
+    <string name="addiction_edit_name">Nom personnalisé</string>
+    <string name="addiction_edit_start">Sobre depuis</string>
+    <string name="addiction_edit_cost">Coût quotidien (€)</string>
+    <string name="addiction_edit_units">Unités par jour</string>
+    <string name="addiction_edit_units_label">Libellé d\'unité (ex : cigarettes)</string>
+
+    <string name="detail_saved">Économisé</string>
+    <string name="detail_units_avoided">Unités évitées</string>
+    <string name="detail_milestones">Jalons</string>
+    <string name="detail_report_relapse">Signaler une rechute</string>
+    <string name="detail_relapse_title">Signaler une rechute</string>
+    <string name="detail_relapse_body">Réinitialiser le compteur est un moment à reconnaître, pas à juger. Ta série précédente reste sauvegardée dans ton historique.</string>
+    <string name="detail_relapse_note">Une note pour ton futur toi (facultatif)</string>
+
+    <string name="journal_title">Journal</string>
+    <string name="journal_empty">Rien d\'écrit pour l\'instant. Appuie sur + pour ajouter ta première entrée.</string>
+    <string name="journal_mood">Humeur</string>
+    <string name="journal_notes">Notes</string>
+    <string name="journal_triggers">Déclencheurs</string>
+    <string name="journal_gratitude">Reconnaissant pour</string>
+    <string name="journal_cravings">Envies aujourd\'hui</string>
+    <string name="journal_search">Rechercher</string>
+
+    <string name="stats_title">Statistiques</string>
+    <string name="stats_total_days">Jours sobres cumulés</string>
+    <string name="stats_total_saved">Total économisé</string>
+    <string name="stats_milestones_reached">Jalons atteints</string>
+    <string name="stats_mood_over_time">Humeur dans le temps</string>
+
+    <string name="settings_title">Paramètres</string>
+    <string name="settings_language">Langue</string>
+    <string name="settings_theme">Thème</string>
+    <string name="settings_theme_system">Système</string>
+    <string name="settings_theme_light">Clair</string>
+    <string name="settings_theme_dark">Sombre</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_notif_pledge">Rappel engagement du matin</string>
+    <string name="settings_notif_journal">Rappel journal du soir</string>
+    <string name="settings_backup">Sauvegarde</string>
+    <string name="settings_backup_export">Exporter vers un fichier</string>
+    <string name="settings_backup_import">Importer depuis un fichier</string>
+    <string name="settings_addictions">Domaines suivis</string>
+    <string name="settings_about">À propos</string>
+
+    <string name="notif_channel_pledge_name">Engagement du matin</string>
+    <string name="notif_channel_pledge_desc">Un rappel doux le matin pour t\'engager pour aujourd\'hui.</string>
+    <string name="notif_channel_journal_name">Rappel journal</string>
+    <string name="notif_channel_journal_desc">Un rappel en soirée pour écrire dans ton journal.</string>
+    <string name="notif_channel_milestone_name">Jalons</string>
+    <string name="notif_channel_milestone_desc">Célèbre les jalons que tu atteins.</string>
+    <string name="notif_pledge_title">Un nouveau jour clair</string>
+    <string name="notif_pledge_body">Prends un instant pour t\'engager pour aujourd\'hui.</string>
+    <string name="notif_journal_title">Comment s\'est passée ta journée ?</string>
+    <string name="notif_journal_body">Quelques mots dans ton journal — même courts, ça compte.</string>
+    <string name="notif_milestone_title">Jalon atteint</string>
+    <string name="notif_milestone_body">%1$d jours sobre — %2$s. Continue.</string>
+
+    <string name="milestone_1d">1 jour</string>
+    <string name="milestone_3d">3 jours</string>
+    <string name="milestone_7d">1 semaine</string>
+    <string name="milestone_14d">2 semaines</string>
+    <string name="milestone_30d">1 mois</string>
+    <string name="milestone_60d">2 mois</string>
+    <string name="milestone_90d">3 mois</string>
+    <string name="milestone_180d">6 mois</string>
+    <string name="milestone_365d">1 an</string>
+    <string name="milestone_730d">2 ans</string>
+    <string name="milestone_1095d">3 ans</string>
+    <string name="milestone_1825d">5 ans</string>
+    <string name="milestone_3650d">10 ans</string>
+
+    <string name="nav_home">Accueil</string>
+    <string name="nav_journal">Journal</string>
+    <string name="nav_stats">Stats</string>
+    <string name="nav_settings">Paramètres</string>
+</resources>
