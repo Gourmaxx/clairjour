@@ -1,6 +1,5 @@
 package com.clairjour.app.ui.screen.journal
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,19 +37,22 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.clairjour.app.R
 import com.clairjour.app.data.AppContainer
 import com.clairjour.app.ui.components.viewModelFactoryOf
+import kotlinx.datetime.LocalDate
+
+private val triggerChoices = listOf("Stress", "Fatigue", "Boredom", "Social", "Sadness", "Anger", "Habit")
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun JournalEditorScreen(
     container: AppContainer,
+    date: LocalDate?,
     onDone: () -> Unit
 ) {
     val vm: JournalEditorViewModel = viewModel(
-        factory = viewModelFactoryOf { JournalEditorViewModel(container.journalRepository) }
+        key = date?.toString() ?: "today",
+        factory = viewModelFactoryOf { JournalEditorViewModel(container.journalRepository, date) }
     )
     val state by vm.state.collectAsState()
-
-    val triggerChoices = listOf("Stress", "Fatigue", "Boredom", "Social", "Sadness", "Anger", "Habit")
 
     Scaffold(
         topBar = {

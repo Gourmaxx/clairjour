@@ -1,7 +1,7 @@
 # Clairjour — SUIVI.md
 
 ## 🧭 Ligne directrice
-**État** (2026-07-06) : APK debug buildé avec succès. Notifications correctement câblées : les workers WorkManager sont planifiés/annulés depuis l'UI settings, avec un sélecteur d'heure (TimePicker M3). Sélecteur de date de début ajouté dans AddictionEdit (DatePicker M3). Prochaine étape : installer sur téléphone, tester le flow réel.
+**État** (2026-07-07) : Audit qualité effectué — 23 correctifs appliqués (bugs critiques, optimisations, code smell). Prochaine étape : rebuild APK debug puis installer sur téléphone pour tester le flow réel.
 
 ## ✅ Fait
 - [x] Choix du branding (Clairjour — bleu profond + or)
@@ -22,7 +22,7 @@
 - [x] **Build debug SUCCESSFUL** → `app/build/outputs/apk/debug/app-debug.apk`
 
 ## ⏳ Reste à faire
-- [ ] Tests unitaires en cours d'exécution (résultat à venir)
+- [ ] Rebuild APK debug après les correctifs d'audit
 - [ ] Installer et tester l'APK sur téléphone (`adb install`)
 - [ ] P7 restant — Backup Google Drive AppDataFolder (pas encore implémenté ; l'export/import JSON local est simple à ajouter)
 - [x] Câbler ReminderScheduler dans le flow settings (toggle ON/OFF + changement d'heure → WorkManager mis à jour)
@@ -34,6 +34,8 @@
 - [ ] Tests instrumentation Room + UI Compose
 
 ## 📋 Notes / gotchas
+- **Audit 2026-07-07** : AddictionDao passé de `interface` à `abstract class` pour supporter `@Transaction`. RelapseDao a `countForDate`. JournalEditorScreen accepte un `date: LocalDate?` optionnel (null = aujourd'hui) — fix bug entrée passée ouvre le mauvais jour.
+
 - **compileSdk = 36** requis (imposé par androidx.core 1.15 + work 2.10) — SDK 36 était déjà installé sur la machine
 - **Warning bénin** : "SDK XML version 4 encountered but tools understand only version 3" — build passe quand même
 - Wrapper Gradle 8.10.2 (copié depuis AlcoLimit, distribution téléchargée automatiquement au premier build)

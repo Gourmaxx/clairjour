@@ -12,13 +12,16 @@ interface JournalDao {
     @Query("SELECT * FROM journal_entries ORDER BY date DESC")
     fun observeAll(): Flow<List<JournalEntryEntity>>
 
+    @Query("SELECT * FROM journal_entries ORDER BY date DESC LIMIT :limit")
+    fun observeRecent(limit: Int): Flow<List<JournalEntryEntity>>
+
     @Query("SELECT * FROM journal_entries WHERE date = :date LIMIT 1")
     fun observeByDate(date: LocalDate): Flow<JournalEntryEntity?>
 
     @Query("SELECT * FROM journal_entries WHERE date = :date LIMIT 1")
     suspend fun getByDate(date: LocalDate): JournalEntryEntity?
 
-    @Query("SELECT * FROM journal_entries WHERE notes LIKE '%' || :query || '%' OR gratitude LIKE '%' || :query || '%' ORDER BY date DESC")
+    @Query("SELECT * FROM journal_entries WHERE notes LIKE '%' || :query || '%' ESCAPE '\\' OR gratitude LIKE '%' || :query || '%' ESCAPE '\\' ORDER BY date DESC")
     fun search(query: String): Flow<List<JournalEntryEntity>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

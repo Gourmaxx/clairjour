@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -42,7 +43,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.clairjour.app.R
 import com.clairjour.app.data.AppContainer
-import com.clairjour.app.data.db.ClairjourDatabase
 import com.clairjour.app.domain.AddictionType
 import com.clairjour.app.domain.Formatters
 import com.clairjour.app.domain.Milestones
@@ -58,12 +58,11 @@ fun AddictionDetailScreen(
     onEdit: () -> Unit
 ) {
     val context = LocalContext.current
-    val db = ClairjourDatabase.get(context)
     val vm: AddictionDetailViewModel = viewModel(
         factory = viewModelFactoryOf {
             AddictionDetailViewModel(
                 container.addictionRepository,
-                db.milestoneDao(),
+                container.milestoneDao,
                 container.relapseRepository,
                 addictionId
             )
@@ -146,7 +145,7 @@ fun AddictionDetailScreen(
             Spacer(Modifier.height(10.dp))
             Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Milestones.all.forEach { m ->
-                    val reached = m.days in state.reachedMilestones || m.days <= state.streakDays
+                    val reached = m.days in state.reachedMilestones
                     MilestoneRow(
                         label = stringResource(m.labelRes),
                         reached = reached
@@ -228,13 +227,12 @@ private fun MilestoneRow(label: String, reached: Boolean) {
                     CircleShape
                 )
         )
-        Spacer(Modifier.height(0.dp).padding(horizontal = 6.dp))
+        Spacer(Modifier.width(12.dp))
         Text(
             label,
             style = MaterialTheme.typography.bodyLarge,
             color = if (reached) MaterialTheme.colorScheme.onBackground
-                    else MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(start = 12.dp)
+                    else MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
 }

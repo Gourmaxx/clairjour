@@ -57,6 +57,7 @@
     <string name="addiction_edit_cost">Daily cost (€)</string>
     <string name="addiction_edit_units">Units per day</string>
     <string name="addiction_edit_units_label">Unit label (e.g. cigarettes)</string>
+    <string name="addiction_edit_primary">Primary</string>
 
     <!-- Addiction detail -->
     <string name="detail_saved">Saved</string>

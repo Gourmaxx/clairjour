@@ -113,7 +113,7 @@ fun AddictionEditScreen(
                 .padding(horizontal = 20.dp, vertical = 12.dp)
         ) {
             LazyRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                items(AddictionType.entries) { t ->
+                items(AddictionType.entries, key = { it.ordinal }) { t ->
                     FilterChip(
                         selected = state.type == t,
                         onClick = { vm.setType(t) },
@@ -190,7 +190,7 @@ fun AddictionEditScreen(
             Spacer(Modifier.height(16.dp))
 
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("Primary", style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
+                Text(stringResource(R.string.addiction_edit_primary), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
                 Switch(checked = state.isPrimary, onCheckedChange = vm::setPrimary)
             }
 

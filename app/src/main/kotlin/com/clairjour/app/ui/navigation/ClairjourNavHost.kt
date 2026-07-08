@@ -2,7 +2,6 @@ package com.clairjour.app.ui.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -17,6 +16,7 @@ import com.clairjour.app.ui.screen.journal.JournalScreen
 import com.clairjour.app.ui.screen.onboarding.OnboardingScreen
 import com.clairjour.app.ui.screen.settings.SettingsScreen
 import com.clairjour.app.ui.screen.stats.StatsScreen
+import kotlinx.datetime.LocalDate
 
 @Composable
 fun ClairjourNavHost(
@@ -45,19 +45,29 @@ fun ClairjourNavHost(
                 contentPadding = contentPadding,
                 onOpenAddiction = { navController.navigate(Destinations.addictionDetail(it)) },
                 onAddAddiction = { navController.navigate(Destinations.addictionEdit()) },
-                onOpenJournalEditor = { navController.navigate(Destinations.JOURNAL_EDITOR) }
+                onOpenJournalEditor = { navController.navigate(Destinations.journalEditor()) }
             )
         }
         composable(Destinations.JOURNAL) {
             JournalScreen(
                 container = container,
                 contentPadding = contentPadding,
-                onOpenEditor = { navController.navigate(Destinations.JOURNAL_EDITOR) }
+                onOpenEditor = { date -> navController.navigate(Destinations.journalEditor(date)) }
             )
         }
-        composable(Destinations.JOURNAL_EDITOR) {
+        composable(
+            route = Destinations.JOURNAL_EDITOR,
+            arguments = listOf(navArgument("date") {
+                type = NavType.StringType
+                nullable = true
+                defaultValue = null
+            })
+        ) { backStackEntry ->
+            val dateStr = backStackEntry.arguments?.getString("date")
+            val date = dateStr?.let { runCatching { LocalDate.parse(it) }.getOrNull() }
             JournalEditorScreen(
                 container = container,
+                date = date,
                 onDone = { navController.popBackStack() }
             )
         }

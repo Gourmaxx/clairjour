@@ -52,6 +52,7 @@
     <string name="addiction_edit_cost">Coût quotidien (€)</string>
     <string name="addiction_edit_units">Unités par jour</string>
     <string name="addiction_edit_units_label">Libellé d\'unité (ex : cigarettes)</string>
+    <string name="addiction_edit_primary">Principal</string>
 
     <string name="detail_saved">Économisé</string>
     <string name="detail_units_avoided">Unités évitées</string>

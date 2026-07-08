@@ -27,6 +27,8 @@ class RelapseRepository(
         val today: LocalDate = now.toLocalDateTime(zone).date
         val previousStreak = Streak.daysSince(addiction.startDate, now)
 
+        if (relapseDao.countForDate(addictionId, today) > 0) return
+
         relapseDao.insert(
             RelapseEventEntity(
                 id = UUID.randomUUID().toString(),

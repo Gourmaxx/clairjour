@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -39,12 +40,13 @@ import com.clairjour.app.data.AppContainer
 import com.clairjour.app.data.db.JournalEntryEntity
 import com.clairjour.app.domain.Formatters
 import com.clairjour.app.ui.components.viewModelFactoryOf
+import kotlinx.datetime.LocalDate
 
 @Composable
 fun JournalScreen(
     container: AppContainer,
     contentPadding: PaddingValues,
-    onOpenEditor: () -> Unit
+    onOpenEditor: (LocalDate?) -> Unit
 ) {
     val vm: JournalViewModel = viewModel(
         factory = viewModelFactoryOf { JournalViewModel(container.journalRepository) }
@@ -54,7 +56,7 @@ fun JournalScreen(
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
-                onClick = onOpenEditor,
+                onClick = { onOpenEditor(null) },
                 containerColor = MaterialTheme.colorScheme.secondary,
                 contentColor = MaterialTheme.colorScheme.onSecondary
             ) { Icon(Icons.Filled.Add, contentDescription = null) }
@@ -95,8 +97,8 @@ fun JournalScreen(
                     contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    items(state.entries) { entry ->
-                        EntryRow(entry, onClick = onOpenEditor)
+                    items(state.entries, key = { it.id }) { entry ->
+                        EntryRow(entry, onClick = { onOpenEditor(entry.date) })
                     }
                 }
             }
@@ -133,8 +135,8 @@ private fun EntryRow(entry: JournalEntryEntity, onClick: () -> Unit) {
                     modifier = Modifier.padding(horizontal = 12.dp)
                 )
             }
-            Spacer(Modifier.height(0.dp).padding(horizontal = 6.dp))
-            Column(Modifier.padding(start = 12.dp)) {
+            Spacer(Modifier.width(12.dp))
+            Column {
                 Text(
                     Formatters.date(entry.date, context),
                     style = MaterialTheme.typography.titleMedium
