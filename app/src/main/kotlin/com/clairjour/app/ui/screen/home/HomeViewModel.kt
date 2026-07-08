@@ -88,7 +88,11 @@ class HomeViewModel(
         val current = uiState.value.current ?: return
         if (uiState.value.pledgeDone) return
         viewModelScope.launch {
-            pledgeRepo.pledge(current.id, todayLocal())
+            try {
+                pledgeRepo.pledge(current.id, todayLocal())
+            } catch (_: Exception) {
+                // pledge failure is silent; UI state remains unchanged
+            }
         }
     }
 

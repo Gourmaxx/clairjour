@@ -29,12 +29,12 @@ class StatsViewModel(
 
     val state: StateFlow<StatsUiState> = combine(
         addictions.observeActive(),
-        journal.observeAll(),
+        journal.observeRecent(30),
         milestoneDao.countAll()
     ) { list, entries, milestoneCount ->
         val totalDays = list.sumOf { Streak.daysSince(it.startDate).toLong() }.toInt()
         val totalSaved = list.sumOf { (it.costPerDay ?: 0.0) * Streak.daysSince(it.startDate) }
-        val moodPoints = entries.take(30).map { it.mood }.reversed()
+        val moodPoints = entries.map { it.mood }.reversed()
         StatsUiState(
             totalDays = totalDays,
             totalSaved = totalSaved,

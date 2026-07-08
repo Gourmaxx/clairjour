@@ -7,7 +7,9 @@ import com.clairjour.app.data.repository.JournalRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
@@ -25,12 +27,8 @@ class JournalViewModel(
 
     @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
     val uiState: StateFlow<JournalListUiState> = queryFlow.flatMapLatest { q ->
-        if (q.isBlank()) repository.observeAll()
-        else repository.search(q.trim())
-    }.let { flow ->
-        kotlinx.coroutines.flow.combine(flow, queryFlow) { entries, q ->
-            JournalListUiState(entries = entries, query = q)
-        }
+        val flow = if (q.isBlank()) repository.observeAll() else repository.search(q.trim())
+        flow.map { entries -> JournalListUiState(entries = entries, query = q) }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), JournalListUiState())
 
     fun setQuery(q: String) { queryFlow.value = q }
@@ -51,29 +49,29 @@ data class EditorUiState(
 )
 
 class JournalEditorViewModel(
-    private val repository: JournalRepository
+    private val repository: JournalRepository,
+    targetDate: LocalDate? = null
 ) : ViewModel() {
 
-    private val today = repository.today()
-    private val _state = MutableStateFlow(EditorUiState(date = today))
+    private val editDate = targetDate ?: repository.today()
+    private val _state = MutableStateFlow(EditorUiState(date = editDate))
     val state: StateFlow<EditorUiState> = _state
 
     init {
         viewModelScope.launch {
-            repository.observeByDate(today).collect { entity ->
-                _state.value = if (entity != null) {
-                    EditorUiState(
-                        date = entity.date,
-                        mood = entity.mood,
-                        notes = entity.notes,
-                        triggers = entity.triggers,
-                        gratitude = entity.gratitude.orEmpty(),
-                        hadCravings = entity.hadCravings,
-                        loaded = true
-                    )
-                } else {
-                    _state.value.copy(loaded = true)
-                }
+            val entity = repository.observeByDate(editDate).first()
+            _state.value = if (entity != null) {
+                EditorUiState(
+                    date = entity.date,
+                    mood = entity.mood,
+                    notes = entity.notes,
+                    triggers = entity.triggers,
+                    gratitude = entity.gratitude.orEmpty(),
+                    hadCravings = entity.hadCravings,
+                    loaded = true
+                )
+            } else {
+                _state.value.copy(loaded = true)
             }
         }
     }
@@ -92,15 +90,19 @@ class JournalEditorViewModel(
     fun save(onDone: () -> Unit) {
         val s = _state.value
         viewModelScope.launch {
-            repository.upsert(
-                date = s.date,
-                mood = s.mood,
-                notes = s.notes,
-                triggers = s.triggers,
-                gratitude = s.gratitude.ifBlank { null },
-                hadCravings = s.hadCravings
-            )
-            onDone()
+            try {
+                repository.upsert(
+                    date = s.date,
+                    mood = s.mood,
+                    notes = s.notes,
+                    triggers = s.triggers,
+                    gratitude = s.gratitude.ifBlank { null },
+                    hadCravings = s.hadCravings
+                )
+                onDone()
+            } catch (_: Exception) {
+                // save failure is silent; entry remains editable
+            }
         }
     }
 }

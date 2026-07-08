@@ -1,0 +1,337 @@
+{
+  "app/build.gradle.kts": {
+    "mtime": 1783236387.497676,
+    "ast_hash": "fc084efa5baf312e6570bff50b5bab7a",
+    "semantic_hash": "fc084efa5baf312e6570bff50b5bab7a"
+  },
+  "app/schemas/com.clairjour.app.data.db.ClairjourDatabase/1.json": {
+    "mtime": 1783236948.9013507,
+    "ast_hash": "e226a84b98540316989068f1d1344536",
+    "semantic_hash": "e226a84b98540316989068f1d1344536"
+  },
+  "app/src/main/assets/motivations.json": {
+    "mtime": 1783233482.0995252,
+    "ast_hash": "945deb09dad5bba6d038bdc85d89ffba",
+    "semantic_hash": "945deb09dad5bba6d038bdc85d89ffba"
+  },
+  "app/src/main/kotlin/com/clairjour/app/ClairjourApplication.kt": {
+    "mtime": 1783319851.9813192,
+    "ast_hash": "2e2f9a93a63ea3d79d19a2229433fc87",
+    "semantic_hash": "2e2f9a93a63ea3d79d19a2229433fc87"
+  },
+  "app/src/main/kotlin/com/clairjour/app/MainActivity.kt": {
+    "mtime": 1783319437.457753,
+    "ast_hash": "31a8ef68504750ee8df9c7276f183a7c",
+    "semantic_hash": "31a8ef68504750ee8df9c7276f183a7c"
+  },
+  "app/src/main/kotlin/com/clairjour/app/data/AppContainer.kt": {
+    "mtime": 1783233493.6383173,
+    "ast_hash": "e30eed917d40f39d4a5626ed04429a12",
+    "semantic_hash": "e30eed917d40f39d4a5626ed04429a12"
+  },
+  "app/src/main/kotlin/com/clairjour/app/data/db/AddictionDao.kt": {
+    "mtime": 1783233421.773451,
+    "ast_hash": "3d030090d7f07a45c4f4ed3327b3c68d",
+    "semantic_hash": "3d030090d7f07a45c4f4ed3327b3c68d"
+  },
+  "app/src/main/kotlin/com/clairjour/app/data/db/AddictionEntity.kt": {
+    "mtime": 1783233363.5677247,
+    "ast_hash": "bf04c79d4e1821408028f3f8d55ed4df",
+    "semantic_hash": "bf04c79d4e1821408028f3f8d55ed4df"
+  },
+  "app/src/main/kotlin/com/clairjour/app/data/db/ClairjourDatabase.kt": {
+    "mtime": 1783233402.9357867,
+    "ast_hash": "00190c94ec1fdf0cf6f6b19a085992bf",
+    "semantic_hash": "00190c94ec1fdf0cf6f6b19a085992bf"
+  },
+  "app/src/main/kotlin/com/clairjour/app/data/db/Converters.kt": {
+    "mtime": 1783233420.296022,
+    "ast_hash": "64655e3060b36246827d149609ed5d90",
+    "semantic_hash": "64655e3060b36246827d149609ed5d90"
+  },
+  "app/src/main/kotlin/com/clairjour/app/data/db/JournalDao.kt": {
+    "mtime": 1783233378.6309514,
+    "ast_hash": "1143e5aa99ae871beabd0b2aa6a2b4d2",
+    "semantic_hash": "1143e5aa99ae871beabd0b2aa6a2b4d2"
+  },
+  "app/src/main/kotlin/com/clairjour/app/data/db/JournalEntryEntity.kt": {
+    "mtime": 1783233374.9887435,
+    "ast_hash": "f8e9def8cd8749d01e0040f5c3bd4056",
+    "semantic_hash": "f8e9def8cd8749d01e0040f5c3bd4056"
+  },
+  "app/src/main/kotlin/com/clairjour/app/data/db/MilestoneDao.kt": {
+    "mtime": 1783233392.1629705,
+    "ast_hash": "458383c0fc389d2a8456a0f53e92205b",
+    "semantic_hash": "458383c0fc389d2a8456a0f53e92205b"
+  },
+  "app/src/main/kotlin/com/clairjour/app/data/db/MilestoneReachedEntity.kt": {
+    "mtime": 1783233388.2536356,
+    "ast_hash": "59ee45b07719abfb684799c18dd7280d",
+    "semantic_hash": "59ee45b07719abfb684799c18dd7280d"
+  },
+  "app/src/main/kotlin/com/clairjour/app/data/db/PledgeDao.kt": {
+    "mtime": 1783233385.2273953,
+    "ast_hash": "ae6ec93ced349cf6f36a064f80fea8a3",
+    "semantic_hash": "ae6ec93ced349cf6f36a064f80fea8a3"
+  },
+  "app/src/main/kotlin/com/clairjour/app/data/db/PledgeEntity.kt": {
+    "mtime": 1783233381.6522963,
+    "ast_hash": "e0c7d4aed863089d2dc2ece3d954bc53",
+    "semantic_hash": "e0c7d4aed863089d2dc2ece3d954bc53"
+  },
+  "app/src/main/kotlin/com/clairjour/app/data/db/RelapseDao.kt": {
+    "mtime": 1783233397.7963557,
+    "ast_hash": "27477526be4b40de72a388500229475b",
+    "semantic_hash": "27477526be4b40de72a388500229475b"
+  },
+  "app/src/main/kotlin/com/clairjour/app/data/db/RelapseEventEntity.kt": {
+    "mtime": 1783233395.216426,
+    "ast_hash": "e0e4b721349f5d4f049f96030a6e4d14",
+    "semantic_hash": "e0e4b721349f5d4f049f96030a6e4d14"
+  },
+  "app/src/main/kotlin/com/clairjour/app/data/motivations/Motivation.kt": {
+    "mtime": 1783233484.1104946,
+    "ast_hash": "08d519067ad26f28a3eaed08ffa3f7f3",
+    "semantic_hash": "08d519067ad26f28a3eaed08ffa3f7f3"
+  },
+  "app/src/main/kotlin/com/clairjour/app/data/motivations/MotivationsRepository.kt": {
+    "mtime": 1783233488.648392,
+    "ast_hash": "89ed3616d1f289a0d5c58b0c2931098c",
+    "semantic_hash": "89ed3616d1f289a0d5c58b0c2931098c"
+  },
+  "app/src/main/kotlin/com/clairjour/app/data/prefs/LocaleManager.kt": {
+    "mtime": 1783319160.419573,
+    "ast_hash": "4fba54dc6e32ab44bb53b1667bc47811",
+    "semantic_hash": "4fba54dc6e32ab44bb53b1667bc47811"
+  },
+  "app/src/main/kotlin/com/clairjour/app/data/prefs/SettingsRepository.kt": {
+    "mtime": 1783233444.6339428,
+    "ast_hash": "6c5a10a97233325739cf93540e8e974d",
+    "semantic_hash": "6c5a10a97233325739cf93540e8e974d"
+  },
+  "app/src/main/kotlin/com/clairjour/app/data/repository/AddictionRepository.kt": {
+    "mtime": 1783233501.9103389,
+    "ast_hash": "ca36585ca5919a7b1db309fa97e7403e",
+    "semantic_hash": "ca36585ca5919a7b1db309fa97e7403e"
+  },
+  "app/src/main/kotlin/com/clairjour/app/data/repository/JournalRepository.kt": {
+    "mtime": 1783233507.8304682,
+    "ast_hash": "2e72f87bfd6f1422a8c5cbbbc1176de7",
+    "semantic_hash": "2e72f87bfd6f1422a8c5cbbbc1176de7"
+  },
+  "app/src/main/kotlin/com/clairjour/app/data/repository/PledgeRepository.kt": {
+    "mtime": 1783233512.2758272,
+    "ast_hash": "745ca0cb0a2291f571f27bbd0ab5ad13",
+    "semantic_hash": "745ca0cb0a2291f571f27bbd0ab5ad13"
+  },
+  "app/src/main/kotlin/com/clairjour/app/data/repository/RelapseRepository.kt": {
+    "mtime": 1783233518.0282948,
+    "ast_hash": "7d07654c91defd600da684c6000244c1",
+    "semantic_hash": "7d07654c91defd600da684c6000244c1"
+  },
+  "app/src/main/kotlin/com/clairjour/app/domain/AddictionType.kt": {
+    "mtime": 1783233323.5289273,
+    "ast_hash": "5449e6bdd597c3cc9d21f2e42edd75d8",
+    "semantic_hash": "5449e6bdd597c3cc9d21f2e42edd75d8"
+  },
+  "app/src/main/kotlin/com/clairjour/app/domain/Formatters.kt": {
+    "mtime": 1783233337.1464815,
+    "ast_hash": "acf8b67417afb87d1c3721b4723fcc5b",
+    "semantic_hash": "acf8b67417afb87d1c3721b4723fcc5b"
+  },
+  "app/src/main/kotlin/com/clairjour/app/domain/Milestones.kt": {
+    "mtime": 1783233330.0803175,
+    "ast_hash": "2805106aa345277aef9fd21457e38be9",
+    "semantic_hash": "2805106aa345277aef9fd21457e38be9"
+  },
+  "app/src/main/kotlin/com/clairjour/app/domain/Streak.kt": {
+    "mtime": 1783233333.156464,
+    "ast_hash": "85f215ac0b0483ff35d2c7d748435c83",
+    "semantic_hash": "85f215ac0b0483ff35d2c7d748435c83"
+  },
+  "app/src/main/kotlin/com/clairjour/app/notifications/NotificationChannels.kt": {
+    "mtime": 1783235575.3221757,
+    "ast_hash": "4668a868811a86eb459224926bf94d24",
+    "semantic_hash": "4668a868811a86eb459224926bf94d24"
+  },
+  "app/src/main/kotlin/com/clairjour/app/notifications/ReminderScheduler.kt": {
+    "mtime": 1783335522.5298333,
+    "ast_hash": "7ab3c730caf630009d2f5ed5553acd12",
+    "semantic_hash": "7ab3c730caf630009d2f5ed5553acd12"
+  },
+  "app/src/main/kotlin/com/clairjour/app/notifications/ReminderWorker.kt": {
+    "mtime": 1783235584.8744867,
+    "ast_hash": "54b51f64db7a162977e1802864d749c3",
+    "semantic_hash": "54b51f64db7a162977e1802864d749c3"
+  },
+  "app/src/main/kotlin/com/clairjour/app/ui/ClairjourApp.kt": {
+    "mtime": 1783235202.8391373,
+    "ast_hash": "ccae8adc2cb5d324729b44cc68b43563",
+    "semantic_hash": "ccae8adc2cb5d324729b44cc68b43563"
+  },
+  "app/src/main/kotlin/com/clairjour/app/ui/WithLocale.kt": {
+    "mtime": 1783320002.4387832,
+    "ast_hash": "3353f4fe87e92402f75148e7252d19aa",
+    "semantic_hash": "3353f4fe87e92402f75148e7252d19aa"
+  },
+  "app/src/main/kotlin/com/clairjour/app/ui/components/ClairjourComponents.kt": {
+    "mtime": 1783235234.8130448,
+    "ast_hash": "9513ebb02439b5564d7cd8f80425f186",
+    "semantic_hash": "9513ebb02439b5564d7cd8f80425f186"
+  },
+  "app/src/main/kotlin/com/clairjour/app/ui/components/ViewModelFactory.kt": {
+    "mtime": 1783235237.405686,
+    "ast_hash": "11aa2e82e942be0da02e7a04bdaa1875",
+    "semantic_hash": "11aa2e82e942be0da02e7a04bdaa1875"
+  },
+  "app/src/main/kotlin/com/clairjour/app/ui/navigation/ClairjourNavHost.kt": {
+    "mtime": 1783235215.9894476,
+    "ast_hash": "7b069da3a706a6be0fd30dc3ee4443e2",
+    "semantic_hash": "7b069da3a706a6be0fd30dc3ee4443e2"
+  },
+  "app/src/main/kotlin/com/clairjour/app/ui/navigation/Destinations.kt": {
+    "mtime": 1783235189.5748208,
+    "ast_hash": "abfc34260872e507c4904b22d3f60b34",
+    "semantic_hash": "abfc34260872e507c4904b22d3f60b34"
+  },
+  "app/src/main/kotlin/com/clairjour/app/ui/screen/addiction/AddictionDetailScreen.kt": {
+    "mtime": 1783237070.2890363,
+    "ast_hash": "fe619ed2bd434e5b93c073024a7c485e",
+    "semantic_hash": "fe619ed2bd434e5b93c073024a7c485e"
+  },
+  "app/src/main/kotlin/com/clairjour/app/ui/screen/addiction/AddictionEditScreen.kt": {
+    "mtime": 1783335696.3839064,
+    "ast_hash": "776adf6e6d6d43d78bec2b4c5b787048",
+    "semantic_hash": "776adf6e6d6d43d78bec2b4c5b787048"
+  },
+  "app/src/main/kotlin/com/clairjour/app/ui/screen/addiction/AddictionViewModel.kt": {
+    "mtime": 1783235513.9552329,
+    "ast_hash": "4363d068d994b734a5cc4a64e82f776e",
+    "semantic_hash": "4363d068d994b734a5cc4a64e82f776e"
+  },
+  "app/src/main/kotlin/com/clairjour/app/ui/screen/home/HomeScreen.kt": {
+    "mtime": 1783362436.1232276,
+    "ast_hash": "0f086723e0539e09c029bc0b45d98f9b",
+    "semantic_hash": "0f086723e0539e09c029bc0b45d98f9b"
+  },
+  "app/src/main/kotlin/com/clairjour/app/ui/screen/home/HomeViewModel.kt": {
+    "mtime": 1783235311.1015677,
+    "ast_hash": "fa3834b4fe59944c1657c75fd9529689",
+    "semantic_hash": "fa3834b4fe59944c1657c75fd9529689"
+  },
+  "app/src/main/kotlin/com/clairjour/app/ui/screen/journal/JournalEditorScreen.kt": {
+    "mtime": 1783235406.4186034,
+    "ast_hash": "793a70cbdf58b90a53e86aa9b5d1756c",
+    "semantic_hash": "793a70cbdf58b90a53e86aa9b5d1756c"
+  },
+  "app/src/main/kotlin/com/clairjour/app/ui/screen/journal/JournalScreen.kt": {
+    "mtime": 1783235384.737646,
+    "ast_hash": "423cbe92a0d39f51e735a6256ecb68e7",
+    "semantic_hash": "423cbe92a0d39f51e735a6256ecb68e7"
+  },
+  "app/src/main/kotlin/com/clairjour/app/ui/screen/journal/JournalViewModel.kt": {
+    "mtime": 1783235363.1435263,
+    "ast_hash": "a00463842cc3f452537b4d553657947a",
+    "semantic_hash": "a00463842cc3f452537b4d553657947a"
+  },
+  "app/src/main/kotlin/com/clairjour/app/ui/screen/onboarding/OnboardingScreen.kt": {
+    "mtime": 1783319170.3717215,
+    "ast_hash": "dc197b7bd06b89386ceab381dd707508",
+    "semantic_hash": "dc197b7bd06b89386ceab381dd707508"
+  },
+  "app/src/main/kotlin/com/clairjour/app/ui/screen/onboarding/OnboardingViewModel.kt": {
+    "mtime": 1783235243.8819616,
+    "ast_hash": "5eb4ede65d3bbd9df1519a0be5244b40",
+    "semantic_hash": "5eb4ede65d3bbd9df1519a0be5244b40"
+  },
+  "app/src/main/kotlin/com/clairjour/app/ui/screen/settings/SettingsScreen.kt": {
+    "mtime": 1783335644.4131973,
+    "ast_hash": "43c82f3c8deff036bf1f05043a015900",
+    "semantic_hash": "43c82f3c8deff036bf1f05043a015900"
+  },
+  "app/src/main/kotlin/com/clairjour/app/ui/screen/settings/SettingsViewModel.kt": {
+    "mtime": 1783335540.9881957,
+    "ast_hash": "d0801d548a033b158228e436b3ed1760",
+    "semantic_hash": "d0801d548a033b158228e436b3ed1760"
+  },
+  "app/src/main/kotlin/com/clairjour/app/ui/screen/stats/StatsScreen.kt": {
+    "mtime": 1783235433.3838406,
+    "ast_hash": "55a991d5d070cf127863ef4f0523562f",
+    "semantic_hash": "55a991d5d070cf127863ef4f0523562f"
+  },
+  "app/src/main/kotlin/com/clairjour/app/ui/screen/stats/StatsViewModel.kt": {
+    "mtime": 1783235414.473913,
+    "ast_hash": "1484c2f52f94856f05c45f290899e8e2",
+    "semantic_hash": "1484c2f52f94856f05c45f290899e8e2"
+  },
+  "app/src/main/kotlin/com/clairjour/app/ui/theme/Color.kt": {
+    "mtime": 1783233294.7100346,
+    "ast_hash": "2b953bc8452f8611b31374c0f013015b",
+    "semantic_hash": "2b953bc8452f8611b31374c0f013015b"
+  },
+  "app/src/main/kotlin/com/clairjour/app/ui/theme/Theme.kt": {
+    "mtime": 1783233319.5518756,
+    "ast_hash": "ba92ca0d1077c2c9ff57f5c0b24fa15a",
+    "semantic_hash": "ba92ca0d1077c2c9ff57f5c0b24fa15a"
+  },
+  "app/src/main/kotlin/com/clairjour/app/ui/theme/Type.kt": {
+    "mtime": 1783233349.6554375,
+    "ast_hash": "e46cc9e7b3844c4354c4379d38222b53",
+    "semantic_hash": "e46cc9e7b3844c4354c4379d38222b53"
+  },
+  "app/src/main/kotlin/com/clairjour/app/widget/CounterWidget.kt": {
+    "mtime": 1783235617.7915976,
+    "ast_hash": "ff22ac2dfcb5907d9dce54485e11f52f",
+    "semantic_hash": "ff22ac2dfcb5907d9dce54485e11f52f"
+  },
+  "app/src/main/kotlin/com/clairjour/app/widget/CounterWidgetReceiver.kt": {
+    "mtime": 1783235594.9201226,
+    "ast_hash": "38ad09691691bf21efdaf7334ffa211b",
+    "semantic_hash": "38ad09691691bf21efdaf7334ffa211b"
+  },
+  "app/src/test/kotlin/com/clairjour/app/data/ConvertersTest.kt": {
+    "mtime": 1783237047.6902716,
+    "ast_hash": "6018c42644a2213a1e0c5e08977a615e",
+    "semantic_hash": "6018c42644a2213a1e0c5e08977a615e"
+  },
+  "app/src/test/kotlin/com/clairjour/app/domain/MilestonesTest.kt": {
+    "mtime": 1783237036.5131989,
+    "ast_hash": "07df234d3c62eb1631ca362a9f65c77a",
+    "semantic_hash": "07df234d3c62eb1631ca362a9f65c77a"
+  },
+  "build.gradle.kts": {
+    "mtime": 1783231172.4486158,
+    "ast_hash": "f18c3f5819750d1800ff9c434f0b75bf",
+    "semantic_hash": "f18c3f5819750d1800ff9c434f0b75bf"
+  },
+  "gradlew": {
+    "mtime": 1783231160.6764169,
+    "ast_hash": "266606e78242737ef3da02a80ea0564d",
+    "semantic_hash": "266606e78242737ef3da02a80ea0564d"
+  },
+  "settings.gradle.kts": {
+    "mtime": 1783231170.862523,
+    "ast_hash": "3a882e8629e383cd3b24deb0db880941",
+    "semantic_hash": "3a882e8629e383cd3b24deb0db880941"
+  },
+  "SUIVI.md": {
+    "mtime": 1783336557.7600832,
+    "ast_hash": "491251d5af199458843569a1f1ebdbb7",
+    "semantic_hash": "491251d5af199458843569a1f1ebdbb7"
+  },
+  "docs/DESIGN.md": {
+    "mtime": 1783229643.2498257,
+    "ast_hash": "ebaa3755679a4c5725d4fe1748a6a85b",
+    "semantic_hash": "ebaa3755679a4c5725d4fe1748a6a85b"
+  },
+  "mockups/index.html": {
+    "mtime": 1783228876.7390375,
+    "ast_hash": "b232c988af9ab7ec19a4bf7faf070fda",
+    "semantic_hash": "b232c988af9ab7ec19a4bf7faf070fda"
+  },
+  "mockups/logos.html": {
+    "mtime": 1783318213.2862816,
+    "ast_hash": "630ffcada8465838499af05b68753af0",
+    "semantic_hash": "630ffcada8465838499af05b68753af0"
+  }
+}

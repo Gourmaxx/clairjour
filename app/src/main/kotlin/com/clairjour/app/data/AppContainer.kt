@@ -2,6 +2,7 @@ package com.clairjour.app.data
 
 import android.content.Context
 import com.clairjour.app.data.db.ClairjourDatabase
+import com.clairjour.app.data.db.MilestoneDao
 import com.clairjour.app.data.motivations.MotivationsRepository
 import com.clairjour.app.data.prefs.SettingsRepository
 import com.clairjour.app.data.repository.AddictionRepository
@@ -16,6 +17,7 @@ interface AppContainer {
     val journalRepository: JournalRepository
     val pledgeRepository: PledgeRepository
     val relapseRepository: RelapseRepository
+    val milestoneDao: MilestoneDao
 }
 
 class DefaultAppContainer(context: Context) : AppContainer {
@@ -31,4 +33,5 @@ class DefaultAppContainer(context: Context) : AppContainer {
         db.milestoneDao(),
         db.addictionDao()
     )
+    override val milestoneDao = db.milestoneDao()
 }

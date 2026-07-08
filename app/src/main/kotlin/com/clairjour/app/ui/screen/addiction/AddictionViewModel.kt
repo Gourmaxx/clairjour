@@ -119,30 +119,34 @@ class AddictionEditViewModel(
     fun save(onDone: () -> Unit) {
         val s = _state.value
         viewModelScope.launch {
-            if (s.existing == null) {
-                addictionRepository.create(
-                    name = s.name.ifBlank { "?" },
-                    type = s.type,
-                    startDate = s.startDate,
-                    costPerDay = s.costPerDay.replace(',', '.').toDoubleOrNull(),
-                    unitPerDay = s.unitPerDay.replace(',', '.').toDoubleOrNull(),
-                    unitLabel = s.unitLabel.ifBlank { null },
-                    isPrimary = s.isPrimary
-                )
-            } else {
-                addictionRepository.update(
-                    s.existing.copy(
+            try {
+                if (s.existing == null) {
+                    addictionRepository.create(
                         name = s.name.ifBlank { "?" },
-                        type = s.type.name,
+                        type = s.type,
                         startDate = s.startDate,
                         costPerDay = s.costPerDay.replace(',', '.').toDoubleOrNull(),
                         unitPerDay = s.unitPerDay.replace(',', '.').toDoubleOrNull(),
                         unitLabel = s.unitLabel.ifBlank { null },
                         isPrimary = s.isPrimary
                     )
-                )
+                } else {
+                    addictionRepository.update(
+                        s.existing.copy(
+                            name = s.name.ifBlank { "?" },
+                            type = s.type.name,
+                            startDate = s.startDate,
+                            costPerDay = s.costPerDay.replace(',', '.').toDoubleOrNull(),
+                            unitPerDay = s.unitPerDay.replace(',', '.').toDoubleOrNull(),
+                            unitLabel = s.unitLabel.ifBlank { null },
+                            isPrimary = s.isPrimary
+                        )
+                    )
+                }
+                onDone()
+            } catch (_: Exception) {
+                // save failure is silent; form remains open
             }
-            onDone()
         }
     }
 }

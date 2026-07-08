@@ -10,11 +10,14 @@ import kotlinx.serialization.json.Json
 class MotivationsRepository(private val context: Context) {
 
     private val cached: List<Motivation> by lazy {
-        val json = context.assets.open("motivations.json").bufferedReader().use { it.readText() }
-        Json.decodeFromString(ListSerializer(Motivation.serializer()), json)
+        runCatching {
+            val json = context.assets.open("motivations.json").bufferedReader().use { it.readText() }
+            Json.decodeFromString(ListSerializer(Motivation.serializer()), json)
+        }.getOrDefault(emptyList())
     }
 
-    fun ofDay(): Motivation {
+    fun ofDay(): Motivation? {
+        if (cached.isEmpty()) return null
         val zone = TimeZone.currentSystemDefault()
         val today = Clock.System.now().toLocalDateTime(zone).date
         val index = (today.toEpochDays().toLong() % cached.size).toInt().let {

@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.clairjour.app.R
 import com.clairjour.app.data.AppContainer
-import com.clairjour.app.data.db.ClairjourDatabase
 import com.clairjour.app.domain.Formatters
 import com.clairjour.app.ui.components.ClairjourCard
 import com.clairjour.app.ui.components.viewModelFactoryOf
@@ -37,13 +36,12 @@ fun StatsScreen(
     contentPadding: PaddingValues
 ) {
     val context = LocalContext.current
-    val db = ClairjourDatabase.get(context)
     val vm: StatsViewModel = viewModel(
         factory = viewModelFactoryOf {
             StatsViewModel(
                 container.addictionRepository,
                 container.journalRepository,
-                db.milestoneDao()
+                container.milestoneDao
             )
         }
     )

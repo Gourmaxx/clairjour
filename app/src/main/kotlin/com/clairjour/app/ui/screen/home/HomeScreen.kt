@@ -35,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalConfiguration
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import java.time.Period
@@ -89,7 +90,7 @@ fun HomeScreen(
 
         if (state.addictions.size > 1) {
             LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                items(state.addictions) { addiction ->
+                items(state.addictions, key = { it.id }) { addiction ->
                     val isCurrent = state.current?.id == addiction.id
                     FilterChip(
                         selected = isCurrent,
@@ -172,7 +173,7 @@ private fun CounterBlock(
 ) {
     var now by remember { mutableStateOf(Clock.System.now()) }
     LaunchedEffect(startDate) {
-        while (true) {
+        while (isActive) {
             delay(1_000)
             now = Clock.System.now()
         }

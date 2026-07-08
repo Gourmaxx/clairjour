@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.first
 class CounterWidget : GlanceAppWidget() {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        val app = context.applicationContext as ClairjourApplication
+        val app = context.applicationContext as? ClairjourApplication ?: return
         val primary = app.container.addictionRepository.observePrimary().first()
         val days = primary?.let { Streak.daysSince(it.startDate) } ?: 0
         val label = primary?.name.orEmpty()
