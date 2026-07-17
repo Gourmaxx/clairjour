@@ -17,4 +17,13 @@ interface PledgeDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(entity: PledgeEntity)
+
+    @Query("SELECT * FROM pledges")
+    suspend fun getAll(): List<PledgeEntity>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(entities: List<PledgeEntity>)
+
+    @Query("DELETE FROM pledges")
+    suspend fun deleteAll()
 }

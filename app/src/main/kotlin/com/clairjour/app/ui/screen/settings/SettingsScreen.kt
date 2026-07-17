@@ -1,5 +1,7 @@
 package com.clairjour.app.ui.screen.settings
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,6 +26,8 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import android.widget.Toast
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -31,6 +35,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -50,6 +55,9 @@ import com.clairjour.app.data.prefs.ThemeMode
 import com.clairjour.app.domain.AddictionType
 import com.clairjour.app.notifications.ReminderScheduler
 import com.clairjour.app.ui.components.viewModelFactoryOf
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,11 +69,43 @@ fun SettingsScreen(
 ) {
     val vm: SettingsViewModel = viewModel(
         factory = viewModelFactoryOf {
-            SettingsViewModel(container.settingsRepository, container.addictionRepository)
+            SettingsViewModel(
+                container.settingsRepository,
+                container.addictionRepository,
+                container.backupRepository
+            )
         }
     )
     val state by vm.state.collectAsState()
     val context = LocalContext.current
+
+    // File pickers
+    val exportLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.CreateDocument("application/json")
+    ) { uri -> uri?.let { vm.exportBackup(it) } }
+
+    val importLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) { uri -> uri?.let { vm.importBackup(it) } }
+
+    // Toast on backup result
+    val exportSuccess = stringResource(R.string.backup_export_success)
+    val importSuccess = stringResource(R.string.backup_import_success)
+    val exportError = stringResource(R.string.backup_export_error)
+    val importError = stringResource(R.string.backup_import_error)
+    LaunchedEffect(state.backupStatus) {
+        val msg = when (state.backupStatus) {
+            BackupStatus.SUCCESS_EXPORT -> exportSuccess
+            BackupStatus.SUCCESS_IMPORT -> importSuccess
+            BackupStatus.ERROR_EXPORT -> exportError
+            BackupStatus.ERROR_IMPORT -> importError
+            else -> null
+        }
+        if (msg != null) {
+            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+            vm.clearBackupStatus()
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -160,6 +200,31 @@ fun SettingsScreen(
                         ReminderScheduler.scheduleJournal(context, h, m)
                     }
                 )
+            }
+        }
+
+        Section(title = stringResource(R.string.settings_backup)) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                OutlinedButton(
+                    onClick = {
+                        val timestamp = SimpleDateFormat("yyyyMMdd_HHmm", Locale.US).format(Date())
+                        exportLauncher.launch("clairjour_backup_$timestamp.json")
+                    },
+                    modifier = Modifier.weight(1f),
+                    enabled = state.backupStatus != BackupStatus.LOADING
+                ) {
+                    Text(stringResource(R.string.settings_backup_export))
+                }
+                OutlinedButton(
+                    onClick = { importLauncher.launch(arrayOf("application/json", "*/*")) },
+                    modifier = Modifier.weight(1f),
+                    enabled = state.backupStatus != BackupStatus.LOADING
+                ) {
+                    Text(stringResource(R.string.settings_backup_import))
+                }
             }
         }
 
@@ -296,4 +361,3 @@ private fun NotifTimeRow(hour: Int, minute: Int, onTimeChange: (Int, Int) -> Uni
         )
     }
 }
-

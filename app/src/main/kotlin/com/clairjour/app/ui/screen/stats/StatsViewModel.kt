@@ -3,7 +3,6 @@ package com.clairjour.app.ui.screen.stats
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.clairjour.app.data.db.AddictionEntity
-import com.clairjour.app.data.db.JournalEntryEntity
 import com.clairjour.app.data.db.MilestoneDao
 import com.clairjour.app.data.repository.AddictionRepository
 import com.clairjour.app.data.repository.JournalRepository
@@ -17,6 +16,7 @@ data class StatsUiState(
     val totalDays: Int = 0,
     val totalSaved: Double = 0.0,
     val milestonesReached: Int = 0,
+    val reachedMilestoneDays: Set<Int> = emptySet(),
     val recentMoodPoints: List<Int> = emptyList(),
     val addictions: List<AddictionEntity> = emptyList()
 )
@@ -30,15 +30,17 @@ class StatsViewModel(
     val state: StateFlow<StatsUiState> = combine(
         addictions.observeActive(),
         journal.observeRecent(30),
-        milestoneDao.countAll()
-    ) { list, entries, milestoneCount ->
+        milestoneDao.observeAll()
+    ) { list, entries, milestones ->
         val totalDays = list.sumOf { Streak.daysSince(it.startDate).toLong() }.toInt()
         val totalSaved = list.sumOf { (it.costPerDay ?: 0.0) * Streak.daysSince(it.startDate) }
         val moodPoints = entries.map { it.mood }.reversed()
+        val reachedDays = milestones.map { it.milestoneDays }.toSet()
         StatsUiState(
             totalDays = totalDays,
             totalSaved = totalSaved,
-            milestonesReached = milestoneCount,
+            milestonesReached = milestones.size,
+            reachedMilestoneDays = reachedDays,
             recentMoodPoints = moodPoints,
             addictions = list
         )

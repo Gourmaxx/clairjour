@@ -17,4 +17,13 @@ interface RelapseDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(entity: RelapseEventEntity)
+
+    @Query("SELECT * FROM relapse_events")
+    suspend fun getAll(): List<RelapseEventEntity>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(entities: List<RelapseEventEntity>)
+
+    @Query("DELETE FROM relapse_events")
+    suspend fun deleteAll()
 }

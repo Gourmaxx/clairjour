@@ -29,4 +29,13 @@ interface JournalDao {
 
     @Query("DELETE FROM journal_entries WHERE id = :id")
     suspend fun delete(id: String)
+
+    @Query("SELECT * FROM journal_entries")
+    suspend fun getAll(): List<JournalEntryEntity>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(entities: List<JournalEntryEntity>)
+
+    @Query("DELETE FROM journal_entries")
+    suspend fun deleteAll()
 }

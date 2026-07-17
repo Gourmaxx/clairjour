@@ -1,15 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Clairjour adaptive icon foreground: rising sun above horizon, gold on transparent -->
+<!-- Safe zone: 72dp centered in 108dp canvas. All elements fit within the safe zone. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
+
+    <!-- Horizon line -->
     <path
         android:fillColor="#D4A857"
-        android:pathData="M54,44 m-14,0 a14,14 0 1,0 28,0 a14,14 0 1,0 -28,0" />
+        android:pathData="M20,62 L88,62 L88,66 L20,66 Z" />
+
+    <!-- Sun disc (center at 54,52, radius 12) -->
     <path
         android:fillColor="#D4A857"
-        android:strokeColor="#D4A857"
-        android:strokeWidth="2"
-        android:pathData="M30,66 L78,66" />
+        android:pathData="M54,40 m-12,0 a12,12 0 1,0 24,0 a12,12 0 1,0 -24,0" />
+
+    <!-- Ray top -->
+    <path
+        android:fillColor="#D4A857"
+        android:pathData="M52,25 L56,25 L56,32 L52,32 Z" />
+
+    <!-- Ray top-right -->
+    <path
+        android:fillColor="#D4A857"
+        android:pathData="M67.5,29.5 L70.3,32.3 L65.3,37.3 L62.5,34.5 Z" />
+
+    <!-- Ray right -->
+    <path
+        android:fillColor="#D4A857"
+        android:pathData="M71,50 L71,54 L78,54 L78,50 Z" />
+
+    <!-- Ray top-left -->
+    <path
+        android:fillColor="#D4A857"
+        android:pathData="M37.7,29.5 L42.7,34.5 L39.9,37.3 L34.9,32.3 Z" />
+
+    <!-- Ray left -->
+    <path
+        android:fillColor="#D4A857"
+        android:pathData="M30,50 L30,54 L37,54 L37,50 Z" />
+
+    <!-- Ray right-low (hidden below horizon — omit) -->
+    <!-- Small glow dots left/right of horizon -->
+    <path
+        android:fillColor="#D4A857"
+        android:pathData="M20,58 L32,58 L32,61 L20,61 Z" />
+    <path
+        android:fillColor="#D4A857"
+        android:pathData="M76,58 L88,58 L88,61 L76,61 Z" />
 </vector>

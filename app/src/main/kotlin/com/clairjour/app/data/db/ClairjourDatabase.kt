@@ -36,8 +36,7 @@ abstract class ClairjourDatabase : RoomDatabase() {
                     context.applicationContext,
                     ClairjourDatabase::class.java,
                     DB_NAME
-                ).fallbackToDestructiveMigration()
-                    .build().also { instance = it }
+                ).build().also { instance = it }
             }
     }
 }

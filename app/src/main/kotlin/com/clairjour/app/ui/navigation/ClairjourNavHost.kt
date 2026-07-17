@@ -8,7 +8,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.clairjour.app.data.AppContainer
-import com.clairjour.app.ui.screen.addiction.AddictionDetailScreen
 import com.clairjour.app.ui.screen.addiction.AddictionEditScreen
 import com.clairjour.app.ui.screen.home.HomeScreen
 import com.clairjour.app.ui.screen.journal.JournalEditorScreen
@@ -43,7 +42,6 @@ fun ClairjourNavHost(
             HomeScreen(
                 container = container,
                 contentPadding = contentPadding,
-                onOpenAddiction = { navController.navigate(Destinations.addictionDetail(it)) },
                 onAddAddiction = { navController.navigate(Destinations.addictionEdit()) },
                 onOpenJournalEditor = { navController.navigate(Destinations.journalEditor()) }
             )
@@ -83,18 +81,6 @@ fun ClairjourNavHost(
                 contentPadding = contentPadding,
                 onEditAddiction = { navController.navigate(Destinations.addictionEdit(it)) },
                 onAddAddiction = { navController.navigate(Destinations.addictionEdit()) }
-            )
-        }
-        composable(
-            route = Destinations.ADDICTION_DETAIL,
-            arguments = listOf(navArgument("addictionId") { type = NavType.StringType })
-        ) { backStackEntry ->
-            val id = backStackEntry.arguments?.getString("addictionId") ?: return@composable
-            AddictionDetailScreen(
-                container = container,
-                addictionId = id,
-                onBack = { navController.popBackStack() },
-                onEdit = { navController.navigate(Destinations.addictionEdit(id)) }
             )
         }
         composable(

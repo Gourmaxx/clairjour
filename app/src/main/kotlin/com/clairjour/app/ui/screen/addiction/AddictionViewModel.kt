@@ -3,61 +3,12 @@ package com.clairjour.app.ui.screen.addiction
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.clairjour.app.data.db.AddictionEntity
-import com.clairjour.app.data.db.MilestoneReachedEntity
 import com.clairjour.app.data.repository.AddictionRepository
-import com.clairjour.app.data.repository.RelapseRepository
-import com.clairjour.app.data.db.MilestoneDao
 import com.clairjour.app.domain.AddictionType
-import com.clairjour.app.domain.Milestone
-import com.clairjour.app.domain.Milestones
-import com.clairjour.app.domain.Streak
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
-
-data class AddictionDetailUiState(
-    val addiction: AddictionEntity? = null,
-    val streakDays: Int = 0,
-    val reachedMilestones: Set<Int> = emptySet(),
-    val savedAmount: Double = 0.0,
-    val unitsAvoided: Double = 0.0
-)
-
-class AddictionDetailViewModel(
-    private val addictionRepository: AddictionRepository,
-    private val milestoneDao: MilestoneDao,
-    private val relapseRepository: RelapseRepository,
-    private val addictionId: String
-) : ViewModel() {
-
-    val state: StateFlow<AddictionDetailUiState> = combine(
-        addictionRepository.observeById(addictionId),
-        milestoneDao.observeFor(addictionId)
-    ) { addiction, milestones ->
-        if (addiction == null) AddictionDetailUiState()
-        else {
-            val days = Streak.daysSince(addiction.startDate)
-            AddictionDetailUiState(
-                addiction = addiction,
-                streakDays = days,
-                reachedMilestones = milestones.map { it.milestoneDays }.toSet(),
-                savedAmount = (addiction.costPerDay ?: 0.0) * days,
-                unitsAvoided = (addiction.unitPerDay ?: 0.0) * days
-            )
-        }
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), AddictionDetailUiState())
-
-    fun reportRelapse(note: String?) {
-        viewModelScope.launch {
-            relapseRepository.reportRelapse(addictionId, note, emptyList())
-        }
-    }
-}
 
 data class AddictionEditUiState(
     val existing: AddictionEntity? = null,

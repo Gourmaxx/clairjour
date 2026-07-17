@@ -26,7 +26,8 @@ class AddictionRepository(private val dao: AddictionDao) {
         isPrimary: Boolean
     ): String {
         val id = UUID.randomUUID().toString()
-        dao.insertWithPrimaryHandling(
+        if (isPrimary) dao.clearPrimary()
+        dao.insert(
             AddictionEntity(
                 id = id,
                 name = name.ifBlank { "?" },
@@ -45,11 +46,13 @@ class AddictionRepository(private val dao: AddictionDao) {
     }
 
     suspend fun update(entity: AddictionEntity) {
-        dao.updateWithPrimaryHandling(entity)
+        if (entity.isPrimary) dao.clearPrimary()
+        dao.update(entity)
     }
 
     suspend fun markPrimary(id: String) {
-        dao.setPrimary(id)
+        dao.clearPrimary()
+        dao.markPrimary(id)
     }
 
     suspend fun softDelete(id: String) = dao.softDelete(id)
