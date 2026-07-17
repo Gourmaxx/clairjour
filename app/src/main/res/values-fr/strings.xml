@@ -119,6 +119,16 @@
     <string name="milestone_1825d">5 ans</string>
     <string name="milestone_3650d">10 ans</string>
 
+    <!-- Célébration jalons -->
+    <string name="milestone_celebration_subtitle">Tu as atteint un jalon !</string>
+    <string name="milestone_celebration_dismiss">Incroyable !</string>
+
+    <!-- Sauvegarde -->
+    <string name="backup_export_success">Sauvegarde exportée</string>
+    <string name="backup_import_success">Données restaurées</string>
+    <string name="backup_export_error">Échec de l\'export</string>
+    <string name="backup_import_error">Échec de l\'import</string>
+
     <string name="nav_home">Accueil</string>
     <string name="nav_journal">Journal</string>
     <string name="nav_stats">Stats</string>

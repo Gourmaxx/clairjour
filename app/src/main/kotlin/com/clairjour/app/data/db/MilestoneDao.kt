@@ -11,6 +11,9 @@ interface MilestoneDao {
     @Query("SELECT * FROM milestones_reached WHERE addiction_id = :addictionId ORDER BY milestone_days ASC")
     fun observeFor(addictionId: String): Flow<List<MilestoneReachedEntity>>
 
+    @Query("SELECT * FROM milestones_reached ORDER BY milestone_days ASC")
+    fun observeAll(): Flow<List<MilestoneReachedEntity>>
+
     @Query("SELECT COUNT(*) FROM milestones_reached")
     fun countAll(): Flow<Int>
 
@@ -22,4 +25,13 @@ interface MilestoneDao {
 
     @Query("DELETE FROM milestones_reached WHERE addiction_id = :addictionId")
     suspend fun clearFor(addictionId: String)
+
+    @Query("SELECT * FROM milestones_reached")
+    suspend fun getAll(): List<MilestoneReachedEntity>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(entities: List<MilestoneReachedEntity>)
+
+    @Query("DELETE FROM milestones_reached")
+    suspend fun deleteAll()
 }

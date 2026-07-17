@@ -3,11 +3,14 @@ package com.clairjour.app.ui.screen.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.clairjour.app.data.db.AddictionEntity
+import com.clairjour.app.data.db.MilestoneDao
+import com.clairjour.app.data.db.MilestoneReachedEntity
 import com.clairjour.app.data.motivations.Motivation
 import com.clairjour.app.data.motivations.MotivationsRepository
 import com.clairjour.app.data.repository.AddictionRepository
 import com.clairjour.app.data.repository.JournalRepository
 import com.clairjour.app.data.repository.PledgeRepository
+import com.clairjour.app.data.repository.RelapseRepository
 import com.clairjour.app.domain.Milestone
 import com.clairjour.app.domain.Milestones
 import com.clairjour.app.domain.Streak
@@ -16,7 +19,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
@@ -33,14 +35,17 @@ data class HomeUiState(
     val progressToNext: Float = 0f,
     val pledgeDone: Boolean = false,
     val motivation: Motivation? = null,
-    val journalWrittenToday: Boolean = false
+    val journalWrittenToday: Boolean = false,
+    val unseenMilestone: MilestoneReachedEntity? = null
 )
 
 class HomeViewModel(
     private val addictionRepo: AddictionRepository,
     private val pledgeRepo: PledgeRepository,
     private val journalRepo: JournalRepository,
-    private val motivationsRepo: MotivationsRepository
+    private val motivationsRepo: MotivationsRepository,
+    private val relapseRepo: RelapseRepository,
+    private val milestoneDao: MilestoneDao
 ) : ViewModel() {
 
     private val selectedIdFlow = kotlinx.coroutines.flow.MutableStateFlow<String?>(null)
@@ -58,9 +63,11 @@ class HomeViewModel(
             val today = todayLocal()
             combine(
                 pledgeRepo.observeFor(current.id, today),
-                journalRepo.observeByDate(today)
-            ) { pledge, journalToday ->
+                journalRepo.observeByDate(today),
+                milestoneDao.observeFor(current.id)
+            ) { pledge, journalToday, milestones ->
                 val days = Streak.daysSince(current.startDate)
+                checkAndInsertMilestones(current.id, days)
                 HomeUiState(
                     loading = false,
                     addictions = list,
@@ -70,7 +77,8 @@ class HomeViewModel(
                     progressToNext = Milestones.progressToNext(days),
                     pledgeDone = pledge != null,
                     motivation = motivationsRepo.ofDay(),
-                    journalWrittenToday = journalToday != null
+                    journalWrittenToday = journalToday != null,
+                    unseenMilestone = milestones.firstOrNull { !it.seenByUser }
                 )
             }
         }
@@ -92,6 +100,37 @@ class HomeViewModel(
                 pledgeRepo.pledge(current.id, todayLocal())
             } catch (_: Exception) {
                 // pledge failure is silent; UI state remains unchanged
+            }
+        }
+    }
+
+    fun reportRelapse(note: String?) {
+        val current = uiState.value.current ?: return
+        viewModelScope.launch {
+            try {
+                relapseRepo.reportRelapse(current.id, note, emptyList())
+            } catch (_: Exception) {
+                // relapse failure is silent
+            }
+        }
+    }
+
+    fun dismissMilestone(id: String) {
+        viewModelScope.launch { milestoneDao.markSeen(id) }
+    }
+
+    private fun checkAndInsertMilestones(addictionId: String, days: Int) {
+        viewModelScope.launch {
+            Milestones.reached(days).forEach { milestone ->
+                milestoneDao.insert(
+                    MilestoneReachedEntity(
+                        id = "${addictionId}_${milestone.days}",
+                        addictionId = addictionId,
+                        milestoneDays = milestone.days,
+                        reachedAt = Clock.System.now(),
+                        seenByUser = false
+                    )
+                )
             }
         }
     }

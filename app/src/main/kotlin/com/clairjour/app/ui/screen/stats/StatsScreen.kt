@@ -3,6 +3,7 @@ package com.clairjour.app.ui.screen.stats
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -11,13 +12,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalContext
@@ -27,6 +32,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.clairjour.app.R
 import com.clairjour.app.data.AppContainer
 import com.clairjour.app.domain.Formatters
+import com.clairjour.app.domain.Milestones
 import com.clairjour.app.ui.components.ClairjourCard
 import com.clairjour.app.ui.components.viewModelFactoryOf
 
@@ -77,12 +83,24 @@ fun StatsScreen(
             value = Formatters.currency(state.totalSaved, context),
             modifier = Modifier.fillMaxWidth()
         )
-        Spacer(Modifier.height(20.dp))
+        Spacer(Modifier.height(24.dp))
 
         Text(stringResource(R.string.stats_mood_over_time), style = MaterialTheme.typography.titleMedium)
         Spacer(Modifier.height(8.dp))
         MoodChart(points = state.recentMoodPoints)
+        Spacer(Modifier.height(24.dp))
 
+        Text(stringResource(R.string.detail_milestones), style = MaterialTheme.typography.titleMedium)
+        Spacer(Modifier.height(10.dp))
+        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Milestones.all.forEach { m ->
+                val reached = m.days in state.reachedMilestoneDays
+                MilestoneRow(
+                    label = stringResource(m.labelRes),
+                    reached = reached
+                )
+            }
+        }
         Spacer(Modifier.height(24.dp))
     }
 }
@@ -103,6 +121,28 @@ private fun StatCard(title: String, value: String, modifier: Modifier = Modifier
                 color = MaterialTheme.colorScheme.onSurface
             )
         }
+    }
+}
+
+@Composable
+private fun MilestoneRow(label: String, reached: Boolean) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Box(
+            modifier = Modifier
+                .size(20.dp)
+                .background(
+                    if (reached) MaterialTheme.colorScheme.secondary
+                    else MaterialTheme.colorScheme.outlineVariant,
+                    CircleShape
+                )
+        )
+        Spacer(Modifier.width(12.dp))
+        Text(
+            label,
+            style = MaterialTheme.typography.bodyLarge,
+            color = if (reached) MaterialTheme.colorScheme.onBackground
+                    else MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }
 

@@ -130,6 +130,16 @@
     <string name="milestone_1825d">5 years</string>
     <string name="milestone_3650d">10 years</string>
 
+    <!-- Milestone celebration -->
+    <string name="milestone_celebration_subtitle">You\'ve reached a milestone!</string>
+    <string name="milestone_celebration_dismiss">Amazing!</string>
+
+    <!-- Backup -->
+    <string name="backup_export_success">Backup exported successfully</string>
+    <string name="backup_import_success">Data restored successfully</string>
+    <string name="backup_export_error">Export failed</string>
+    <string name="backup_import_error">Import failed</string>
+
     <!-- Bottom nav -->
     <string name="nav_home">Home</string>
     <string name="nav_journal">Journal</string>

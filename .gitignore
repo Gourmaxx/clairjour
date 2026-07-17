@@ -10,3 +10,8 @@
 .cxx
 local.properties
 .kotlin
+
+# Signing secrets — never commit
+keystore.properties
+*.jks
+*.keystore
