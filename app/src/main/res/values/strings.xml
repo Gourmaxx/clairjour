@@ -145,4 +145,52 @@
     <string name="nav_journal">Journal</string>
     <string name="nav_stats">Stats</string>
     <string name="nav_settings">Settings</string>
+
+    <!-- Accessibility content descriptions -->
+    <string name="cd_close">Close</string>
+    <string name="cd_back">Back</string>
+    <string name="cd_add_journal_entry">Add a journal entry</string>
+    <string name="cd_delete">Delete</string>
+    <string name="cd_delete_addiction">Delete this area</string>
+    <string name="cd_edit_start_date">Edit start date</string>
+    <string name="cd_sun">Sun</string>
+    <string name="cd_counter_days_hours_minutes">%1$d days sober, %2$dh %3$dm</string>
+    <string name="cd_step_indicator">Step %1$d of %2$d</string>
+
+    <!-- Addiction delete dialog -->
+    <string name="addiction_delete_title">Delete this area?</string>
+    <string name="addiction_delete_body">The related history stays saved (streak, milestones) but this area will no longer be tracked.</string>
+
+    <!-- Journal delete dialog -->
+    <string name="journal_delete_title">Delete this journal entry?</string>
+    <string name="journal_delete_body">This entry will be permanently removed.</string>
+
+    <!-- Relapse undo -->
+    <string name="relapse_recorded">Relapse recorded</string>
+    <string name="relapse_undo">Undo</string>
+
+    <!-- Optional field suffix + skip -->
+    <string name="field_optional_suffix">(optional)</string>
+    <string name="onboarding_configure_later">Configure later</string>
+    <string name="onboarding_start_date_label">Sober since</string>
+
+    <!-- Journal triggers (localized labels shared with EN keys stored in DB) -->
+    <string-array name="journal_trigger_keys">
+        <item>Stress</item>
+        <item>Fatigue</item>
+        <item>Boredom</item>
+        <item>Social</item>
+        <item>Sadness</item>
+        <item>Anger</item>
+        <item>Habit</item>
+    </string-array>
+    <string-array name="journal_trigger_labels">
+        <item>Stress</item>
+        <item>Fatigue</item>
+        <item>Boredom</item>
+        <item>Social</item>
+        <item>Sadness</item>
+        <item>Anger</item>
+        <item>Habit</item>
+    </string-array>
 </resources>

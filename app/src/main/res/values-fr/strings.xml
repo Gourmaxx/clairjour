@@ -133,4 +133,52 @@
     <string name="nav_journal">Journal</string>
     <string name="nav_stats">Stats</string>
     <string name="nav_settings">Paramètres</string>
+
+    <!-- Descriptions d'accessibilité -->
+    <string name="cd_close">Fermer</string>
+    <string name="cd_back">Retour</string>
+    <string name="cd_add_journal_entry">Ajouter une entrée au journal</string>
+    <string name="cd_delete">Supprimer</string>
+    <string name="cd_delete_addiction">Supprimer ce domaine</string>
+    <string name="cd_edit_start_date">Modifier la date de début</string>
+    <string name="cd_sun">Soleil</string>
+    <string name="cd_counter_days_hours_minutes">%1$d jours de sobriété, %2$dh %3$dm</string>
+    <string name="cd_step_indicator">Étape %1$d sur %2$d</string>
+
+    <!-- Dialogue suppression domaine -->
+    <string name="addiction_delete_title">Supprimer ce domaine ?</string>
+    <string name="addiction_delete_body">L\'historique associé sera conservé (streak, jalons) mais le domaine ne sera plus suivi.</string>
+
+    <!-- Dialogue suppression entrée journal -->
+    <string name="journal_delete_title">Supprimer cette entrée du journal ?</string>
+    <string name="journal_delete_body">Cette entrée sera définitivement supprimée.</string>
+
+    <!-- Annulation rechute -->
+    <string name="relapse_recorded">Rechute enregistrée</string>
+    <string name="relapse_undo">Annuler</string>
+
+    <!-- Champs facultatifs + configuration plus tard -->
+    <string name="field_optional_suffix">(facultatif)</string>
+    <string name="onboarding_configure_later">Configurer plus tard</string>
+    <string name="onboarding_start_date_label">Je suis sobre depuis</string>
+
+    <!-- Déclencheurs journal (labels FR, clés EN persistées en base) -->
+    <string-array name="journal_trigger_keys">
+        <item>Stress</item>
+        <item>Fatigue</item>
+        <item>Boredom</item>
+        <item>Social</item>
+        <item>Sadness</item>
+        <item>Anger</item>
+        <item>Habit</item>
+    </string-array>
+    <string-array name="journal_trigger_labels">
+        <item>Stress</item>
+        <item>Fatigue</item>
+        <item>Ennui</item>
+        <item>Social</item>
+        <item>Tristesse</item>
+        <item>Colère</item>
+        <item>Habitude</item>
+    </string-array>
 </resources>
