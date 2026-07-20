@@ -27,6 +27,8 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
+import android.net.Uri
 import android.widget.Toast
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
@@ -34,6 +36,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.rememberTimePickerState
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -47,6 +50,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.clairjour.app.BuildConfig
 import com.clairjour.app.R
 import com.clairjour.app.data.AppContainer
 import com.clairjour.app.data.prefs.AppLanguage
@@ -78,15 +82,45 @@ fun SettingsScreen(
     )
     val state by vm.state.collectAsState()
     val context = LocalContext.current
+    var pendingExportUri by remember { mutableStateOf<Uri?>(null) }
+    var pendingImportUri by remember { mutableStateOf<Uri?>(null) }
 
-    // File pickers
+    // File pickers — the actual encryption call happens after the passphrase dialog closes.
     val exportLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.CreateDocument("application/json")
-    ) { uri -> uri?.let { vm.exportBackup(it) } }
+        ActivityResultContracts.CreateDocument("application/octet-stream")
+    ) { uri -> uri?.let { pendingExportUri = it } }
 
     val importLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.OpenDocument()
-    ) { uri -> uri?.let { vm.importBackup(it) } }
+    ) { uri -> uri?.let { pendingImportUri = it } }
+
+    // Export passphrase dialog
+    pendingExportUri?.let { uri ->
+        PassphraseDialog(
+            titleRes = R.string.backup_passphrase_export_title,
+            bodyRes = R.string.backup_passphrase_export_body,
+            requireConfirm = true,
+            onDismiss = { pendingExportUri = null },
+            onConfirmed = { passphrase ->
+                vm.exportBackup(uri, passphrase)
+                pendingExportUri = null
+            }
+        )
+    }
+
+    // Import passphrase dialog
+    pendingImportUri?.let { uri ->
+        PassphraseDialog(
+            titleRes = R.string.backup_passphrase_import_title,
+            bodyRes = R.string.backup_passphrase_import_body,
+            requireConfirm = false,
+            onDismiss = { pendingImportUri = null },
+            onConfirmed = { passphrase ->
+                vm.importBackup(uri, passphrase)
+                pendingImportUri = null
+            }
+        )
+    }
 
     // Toast on backup result
     val exportSuccess = stringResource(R.string.backup_export_success)
@@ -211,7 +245,7 @@ fun SettingsScreen(
                 OutlinedButton(
                     onClick = {
                         val timestamp = SimpleDateFormat("yyyyMMdd_HHmm", Locale.US).format(Date())
-                        exportLauncher.launch("clairjour_backup_$timestamp.json")
+                        exportLauncher.launch("clairjour_backup_$timestamp.cjbk")
                     },
                     modifier = Modifier.weight(1f),
                     enabled = state.backupStatus != BackupStatus.LOADING
@@ -219,7 +253,7 @@ fun SettingsScreen(
                     Text(stringResource(R.string.settings_backup_export))
                 }
                 OutlinedButton(
-                    onClick = { importLauncher.launch(arrayOf("application/json", "*/*")) },
+                    onClick = { importLauncher.launch(arrayOf("*/*")) },
                     modifier = Modifier.weight(1f),
                     enabled = state.backupStatus != BackupStatus.LOADING
                 ) {
@@ -280,7 +314,7 @@ fun SettingsScreen(
 
         Section(title = stringResource(R.string.settings_about)) {
             Text(
-                "Clairjour · v0.1.0",
+                "Clairjour · v${BuildConfig.VERSION_NAME}",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

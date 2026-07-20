@@ -24,13 +24,19 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -38,8 +44,6 @@ import com.clairjour.app.R
 import com.clairjour.app.data.AppContainer
 import com.clairjour.app.ui.components.viewModelFactoryOf
 import kotlinx.datetime.LocalDate
-
-private val triggerChoices = listOf("Stress", "Fatigue", "Boredom", "Social", "Sadness", "Anger", "Habit")
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,14 +57,21 @@ fun JournalEditorScreen(
         factory = viewModelFactoryOf { JournalEditorViewModel(container.journalRepository, date) }
     )
     val state by vm.state.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val savedMessage = stringResource(R.string.snack_journal_saved)
+    val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             CenterAlignedTopAppBar(
                 title = { Text(stringResource(R.string.journal_title)) },
                 navigationIcon = {
                     IconButton(onClick = onDone) {
-                        Icon(Icons.Filled.Close, contentDescription = null)
+                        Icon(
+                            Icons.Filled.Close,
+                            contentDescription = stringResource(R.string.cd_close)
+                        )
                     }
                 }
             )
@@ -100,15 +111,20 @@ fun JournalEditorScreen(
 
             Text(stringResource(R.string.journal_triggers), style = MaterialTheme.typography.titleMedium)
             Spacer(Modifier.height(6.dp))
+            // Keys are the canonical English tokens stored in DB; labels are localized for display.
+            val triggerKeys = stringArrayResource(R.array.journal_trigger_keys)
+            val triggerLabels = stringArrayResource(R.array.journal_trigger_labels)
             Row(
                 horizontalArrangement = Arrangement.spacedBy(6.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                triggerChoices.take(4).forEach { trigger ->
+                for (i in 0 until minOf(4, triggerKeys.size)) {
+                    val key = triggerKeys[i]
+                    val label = triggerLabels.getOrElse(i) { key }
                     FilterChip(
-                        selected = state.triggers.contains(trigger),
-                        onClick = { vm.toggleTrigger(trigger) },
-                        label = { Text(trigger) }
+                        selected = state.triggers.contains(key),
+                        onClick = { vm.toggleTrigger(key) },
+                        label = { Text(label) }
                     )
                 }
             }
@@ -116,11 +132,13 @@ fun JournalEditorScreen(
                 horizontalArrangement = Arrangement.spacedBy(6.dp),
                 modifier = Modifier.fillMaxWidth().padding(top = 6.dp)
             ) {
-                triggerChoices.drop(4).forEach { trigger ->
+                for (i in 4 until triggerKeys.size) {
+                    val key = triggerKeys[i]
+                    val label = triggerLabels.getOrElse(i) { key }
                     FilterChip(
-                        selected = state.triggers.contains(trigger),
-                        onClick = { vm.toggleTrigger(trigger) },
-                        label = { Text(trigger) }
+                        selected = state.triggers.contains(key),
+                        onClick = { vm.toggleTrigger(key) },
+                        label = { Text(label) }
                     )
                 }
             }
@@ -152,7 +170,14 @@ fun JournalEditorScreen(
             Spacer(Modifier.height(24.dp))
 
             Button(
-                onClick = { vm.save(onDone) },
+                onClick = {
+                    vm.save {
+                        coroutineScope.launch {
+                            snackbarHostState.showSnackbar(savedMessage)
+                        }
+                        onDone()
+                    }
+                },
                 shape = RoundedCornerShape(4.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.secondary,

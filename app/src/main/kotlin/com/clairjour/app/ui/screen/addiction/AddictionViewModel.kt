@@ -67,6 +67,18 @@ class AddictionEditViewModel(
     fun setUnitLabel(v: String) { _state.value = _state.value.copy(unitLabel = v) }
     fun setPrimary(v: Boolean) { _state.value = _state.value.copy(isPrimary = v) }
 
+    fun delete(onDone: () -> Unit) {
+        val existing = _state.value.existing ?: return
+        viewModelScope.launch {
+            try {
+                addictionRepository.softDelete(existing.id)
+                onDone()
+            } catch (_: Exception) {
+                // delete failure is silent; caller stays on screen
+            }
+        }
+    }
+
     fun save(onDone: () -> Unit) {
         val s = _state.value
         viewModelScope.launch {

@@ -157,6 +157,23 @@
     <string name="relapse_recorded">Rechute enregistrée</string>
     <string name="relapse_undo">Annuler</string>
 
+    <!-- Feedback sauvegarde -->
+    <string name="snack_addiction_saved">Domaine enregistré</string>
+    <string name="snack_journal_saved">Entrée enregistrée</string>
+
+    <!-- Dialog passphrase sauvegarde -->
+    <string name="backup_passphrase_export_title">Chiffrer ta sauvegarde</string>
+    <string name="backup_passphrase_export_body">Choisis une phrase de passe pour chiffrer cette sauvegarde. Tu en auras besoin pour restaurer tes données plus tard. Clairjour ne peut pas la récupérer.</string>
+    <string name="backup_passphrase_import_title">Phrase de passe</string>
+    <string name="backup_passphrase_import_body">Cette sauvegarde est chiffrée. Saisis la phrase de passe utilisée lors de l\'export.</string>
+    <string name="backup_passphrase_hint">Phrase de passe</string>
+    <string name="backup_passphrase_confirm_hint">Confirmer la phrase de passe</string>
+    <string name="backup_passphrase_mismatch">Les phrases de passe ne correspondent pas</string>
+    <string name="backup_passphrase_too_short">8 caractères minimum</string>
+    <string name="backup_passphrase_bad">Phrase de passe incorrecte</string>
+    <string name="backup_import_too_large">Fichier de sauvegarde trop volumineux</string>
+    <string name="backup_import_corrupt">Le fichier de sauvegarde semble corrompu</string>
+
     <!-- Champs facultatifs + configuration plus tard -->
     <string name="field_optional_suffix">(facultatif)</string>
     <string name="onboarding_configure_later">Configurer plus tard</string>

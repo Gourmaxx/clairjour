@@ -13,7 +13,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -33,14 +32,20 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -49,6 +54,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -60,7 +67,12 @@ import com.clairjour.app.data.prefs.AppLanguage
 import com.clairjour.app.data.prefs.LocaleManager
 import com.clairjour.app.domain.AddictionType
 import com.clairjour.app.ui.components.viewModelFactoryOf
+import kotlinx.datetime.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OnboardingScreen(
     container: AppContainer,
@@ -79,10 +91,26 @@ fun OnboardingScreen(
     var costPerDay by rememberSaveable { mutableStateOf("") }
     var unitPerDay by rememberSaveable { mutableStateOf("") }
     var unitLabel by rememberSaveable { mutableStateOf("") }
+    var startDateMs by rememberSaveable { mutableLongStateOf(OnboardingViewModel.defaultStart().toEpochMilliseconds()) }
 
     val notifPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
     ) { /* result ignored — proceed either way */ }
+
+    val submit: () -> Unit = {
+        vm.finish(
+            language = language,
+            addictionType = type,
+            addictionName = name.ifBlank {
+                type.name.lowercase().replaceFirstChar { it.uppercase() }
+            },
+            startDate = Instant.fromEpochMilliseconds(startDateMs),
+            costPerDay = costPerDay.replace(',', '.').toDoubleOrNull(),
+            unitPerDay = unitPerDay.replace(',', '.').toDoubleOrNull(),
+            unitLabel = unitLabel.ifBlank { null },
+            onDone = onDone
+        )
+    }
 
     Column(
         modifier = Modifier
@@ -114,12 +142,21 @@ fun OnboardingScreen(
                     onTypeSelected = { type = it },
                     name = name,
                     onNameChange = { name = it },
+                    startDateMs = startDateMs,
+                    onStartDateChange = { startDateMs = it },
                     costPerDay = costPerDay,
                     onCostChange = { costPerDay = it.filter { c -> c.isDigit() || c == '.' || c == ',' } },
                     unitPerDay = unitPerDay,
                     onUnitChange = { unitPerDay = it.filter { c -> c.isDigit() || c == '.' || c == ',' } },
                     unitLabel = unitLabel,
-                    onUnitLabelChange = { unitLabel = it }
+                    onUnitLabelChange = { unitLabel = it },
+                    onSkipOptional = {
+                        // Skip optional financial fields: clear them and jump to next step.
+                        costPerDay = ""
+                        unitPerDay = ""
+                        unitLabel = ""
+                        step = 3
+                    }
                 )
                 3 -> NotifStep(
                     onEnable = {
@@ -146,21 +183,7 @@ fun OnboardingScreen(
 
             Button(
                 onClick = {
-                    if (step < 3) step++ else {
-                        vm.finish(
-                            language = language,
-                            addictionType = type,
-                            addictionName = name.ifBlank {
-                                // fallback: use type label as name (localized at display time)
-                                type.name.lowercase().replaceFirstChar { it.uppercase() }
-                            },
-                            startDate = OnboardingViewModel.defaultStart(),
-                            costPerDay = costPerDay.replace(',', '.').toDoubleOrNull(),
-                            unitPerDay = unitPerDay.replace(',', '.').toDoubleOrNull(),
-                            unitLabel = unitLabel.ifBlank { null },
-                            onDone = onDone
-                        )
-                    }
+                    if (step < 3) step++ else submit()
                 },
                 shape = RoundedCornerShape(4.dp),
                 colors = ButtonDefaults.buttonColors(
@@ -179,7 +202,10 @@ fun OnboardingScreen(
 
 @Composable
 private fun StepIndicator(step: Int, count: Int) {
-    Row {
+    val description = stringResource(R.string.cd_step_indicator, step + 1, count)
+    Row(
+        modifier = Modifier.semantics { contentDescription = description }
+    ) {
         repeat(count) { i ->
             val active = i <= step
             Box(
@@ -264,19 +290,44 @@ private fun LanguageStep(selected: AppLanguage, onSelect: (AppLanguage) -> Unit)
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AddictionStep(
     type: AddictionType,
     onTypeSelected: (AddictionType) -> Unit,
     name: String,
     onNameChange: (String) -> Unit,
+    startDateMs: Long,
+    onStartDateChange: (Long) -> Unit,
     costPerDay: String,
     onCostChange: (String) -> Unit,
     unitPerDay: String,
     onUnitChange: (String) -> Unit,
     unitLabel: String,
-    onUnitLabelChange: (String) -> Unit
+    onUnitLabelChange: (String) -> Unit,
+    onSkipOptional: () -> Unit
 ) {
+    var showDatePicker by remember { mutableStateOf(false) }
+    val optionalSuffix = " " + stringResource(R.string.field_optional_suffix)
+
+    if (showDatePicker) {
+        val datePickerState = rememberDatePickerState(initialSelectedDateMillis = startDateMs)
+        DatePickerDialog(
+            onDismissRequest = { showDatePicker = false },
+            confirmButton = {
+                TextButton(onClick = {
+                    datePickerState.selectedDateMillis?.let(onStartDateChange)
+                    showDatePicker = false
+                }) { Text(stringResource(R.string.action_done)) }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDatePicker = false }) {
+                    Text(stringResource(R.string.action_cancel))
+                }
+            }
+        ) { DatePicker(state = datePickerState) }
+    }
+
     Column(
         modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState())
     ) {
@@ -311,10 +362,43 @@ private fun AddictionStep(
             singleLine = true
         )
         Spacer(Modifier.height(12.dp))
+
+        // "Sober since" date picker: matters most for people who joined already sober.
+        Surface(
+            onClick = { showDatePicker = true },
+            shape = RoundedCornerShape(4.dp),
+            color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Row(
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(Modifier.weight(1f)) {
+                    Text(
+                        stringResource(R.string.onboarding_start_date_label),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    val formatted = remember(startDateMs) {
+                        val date = java.time.Instant.ofEpochMilli(startDateMs)
+                            .atZone(ZoneId.systemDefault()).toLocalDate()
+                        date.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
+                    }
+                    Text(formatted, style = MaterialTheme.typography.bodyLarge)
+                }
+                TextButton(onClick = { showDatePicker = true }) {
+                    Text(stringResource(R.string.action_edit))
+                }
+            }
+        }
+        Spacer(Modifier.height(12.dp))
+
         OutlinedTextField(
             value = costPerDay,
             onValueChange = onCostChange,
-            label = { Text(stringResource(R.string.addiction_edit_cost)) },
+            label = { Text(stringResource(R.string.addiction_edit_cost) + optionalSuffix) },
+            prefix = { Text("€ ") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
@@ -323,7 +407,7 @@ private fun AddictionStep(
         OutlinedTextField(
             value = unitPerDay,
             onValueChange = onUnitChange,
-            label = { Text(stringResource(R.string.addiction_edit_units)) },
+            label = { Text(stringResource(R.string.addiction_edit_units) + optionalSuffix) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
@@ -332,10 +416,16 @@ private fun AddictionStep(
         OutlinedTextField(
             value = unitLabel,
             onValueChange = onUnitLabelChange,
-            label = { Text(stringResource(R.string.addiction_edit_units_label)) },
+            label = { Text(stringResource(R.string.addiction_edit_units_label) + optionalSuffix) },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
+        Spacer(Modifier.height(12.dp))
+
+        TextButton(
+            onClick = onSkipOptional,
+            modifier = Modifier.align(Alignment.End)
+        ) { Text(stringResource(R.string.onboarding_configure_later)) }
     }
 }
 

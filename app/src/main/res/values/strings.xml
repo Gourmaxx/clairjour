@@ -169,6 +169,23 @@
     <string name="relapse_recorded">Relapse recorded</string>
     <string name="relapse_undo">Undo</string>
 
+    <!-- Save feedback -->
+    <string name="snack_addiction_saved">Area saved</string>
+    <string name="snack_journal_saved">Entry saved</string>
+
+    <!-- Backup passphrase dialog -->
+    <string name="backup_passphrase_export_title">Encrypt your backup</string>
+    <string name="backup_passphrase_export_body">Choose a passphrase to encrypt this backup. You\'ll need it to restore your data later. Clairjour cannot recover it.</string>
+    <string name="backup_passphrase_import_title">Enter passphrase</string>
+    <string name="backup_passphrase_import_body">This backup is encrypted. Enter the passphrase you used when exporting it.</string>
+    <string name="backup_passphrase_hint">Passphrase</string>
+    <string name="backup_passphrase_confirm_hint">Confirm passphrase</string>
+    <string name="backup_passphrase_mismatch">Passphrases don\'t match</string>
+    <string name="backup_passphrase_too_short">At least 8 characters</string>
+    <string name="backup_passphrase_bad">Wrong passphrase</string>
+    <string name="backup_import_too_large">Backup file is too large</string>
+    <string name="backup_import_corrupt">Backup file looks corrupt</string>
+
     <!-- Optional field suffix + skip -->
     <string name="field_optional_suffix">(optional)</string>
     <string name="onboarding_configure_later">Configure later</string>
