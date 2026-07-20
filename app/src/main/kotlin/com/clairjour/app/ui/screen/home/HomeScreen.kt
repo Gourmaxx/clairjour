@@ -221,7 +221,19 @@ fun HomeScreen(
             },
             confirmButton = {
                 TextButton(onClick = {
-                    vm.reportRelapse(relapseNote.ifBlank { null })
+                    val note = relapseNote.ifBlank { null }
+                    vm.reportRelapse(note) {
+                        coroutineScope.launch {
+                            val result = snackbarHostState.showSnackbar(
+                                message = relapseRecordedText,
+                                actionLabel = relapseUndoText,
+                                duration = androidx.compose.material3.SnackbarDuration.Short
+                            )
+                            if (result == SnackbarResult.ActionPerformed) {
+                                vm.undoLastRelapse()
+                            }
+                        }
+                    }
                     relapseNote = ""
                     showRelapseDialog = false
                 }) { Text(stringResource(R.string.action_confirm)) }
@@ -337,10 +349,20 @@ private fun CounterBlock(
     val seconds = totalSeconds % 60
 
     val type = AddictionType.fromName(addiction.type)
+    val counterDescription = stringResource(
+        R.string.cd_counter_days_hours_minutes,
+        elapsedDays.toInt(),
+        hours.toInt(),
+        minutes.toInt()
+    )
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .semantics(mergeDescendants = true) {
+                contentDescription = counterDescription
+            }
     ) {
         Text(
             text = addiction.name.ifBlank { stringResource(type.labelRes) },

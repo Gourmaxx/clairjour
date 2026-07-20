@@ -16,6 +16,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -28,6 +30,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -38,7 +43,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import kotlinx.coroutines.launch
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -68,6 +75,10 @@ fun AddictionEditScreen(
     )
     val state by vm.state.collectAsState()
     var showDatePicker by remember { mutableStateOf(false) }
+    var showDeleteDialog by remember { mutableStateOf(false) }
+    val snackbarHostState = remember { SnackbarHostState() }
+    val savedMessage = stringResource(R.string.snack_addiction_saved)
+    val coroutineScope = rememberCoroutineScope()
 
     if (showDatePicker) {
         val datePickerState = rememberDatePickerState(
@@ -93,12 +104,45 @@ fun AddictionEditScreen(
         }
     }
 
+    if (showDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteDialog = false },
+            title = { Text(stringResource(R.string.addiction_delete_title)) },
+            text = { Text(stringResource(R.string.addiction_delete_body)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    showDeleteDialog = false
+                    vm.delete(onDone)
+                }) { Text(stringResource(R.string.action_confirm)) }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteDialog = false }) {
+                    Text(stringResource(R.string.action_cancel))
+                }
+            }
+        )
+    }
+
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             CenterAlignedTopAppBar(
                 title = { Text(if (addictionId == null) stringResource(R.string.action_add) else stringResource(R.string.action_edit)) },
                 navigationIcon = {
-                    IconButton(onClick = onDone) { Icon(Icons.Filled.Close, contentDescription = null) }
+                    IconButton(onClick = onDone) {
+                        Icon(Icons.Filled.Close, contentDescription = stringResource(R.string.cd_close))
+                    }
+                },
+                actions = {
+                    if (addictionId != null) {
+                        IconButton(onClick = { showDeleteDialog = true }) {
+                            Icon(
+                                imageVector = Icons.Filled.Delete,
+                                contentDescription = stringResource(R.string.cd_delete_addiction),
+                                tint = MaterialTheme.colorScheme.error
+                            )
+                        }
+                    }
                 }
             )
         },
@@ -135,6 +179,7 @@ fun AddictionEditScreen(
                 value = state.costPerDay,
                 onValueChange = vm::setCost,
                 label = { Text(stringResource(R.string.addiction_edit_cost)) },
+                prefix = { Text("€ ") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true
@@ -196,7 +241,14 @@ fun AddictionEditScreen(
 
             Spacer(Modifier.height(24.dp))
             Button(
-                onClick = { vm.save(onDone) },
+                onClick = {
+                    vm.save {
+                        coroutineScope.launch {
+                            snackbarHostState.showSnackbar(savedMessage)
+                        }
+                        onDone()
+                    }
+                },
                 shape = RoundedCornerShape(4.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.secondary,
