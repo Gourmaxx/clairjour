@@ -37,11 +37,20 @@ android {
 
     signingConfigs {
         create("release") {
+            // Passwords are read from env first (CI/production), then keystore.properties.
+            val envStorePassword = System.getenv("CLAIRJOUR_STORE_PASSWORD")
+            val envKeyPassword = System.getenv("CLAIRJOUR_KEY_PASSWORD")
             if (keystorePropertiesFile.exists()) {
                 storeFile = file(keystoreProperties.getProperty("storeFile"))
-                storePassword = keystoreProperties.getProperty("storePassword")
+                storePassword = envStorePassword ?: keystoreProperties.getProperty("storePassword")
                 keyAlias = keystoreProperties.getProperty("keyAlias")
-                keyPassword = keystoreProperties.getProperty("keyPassword")
+                keyPassword = envKeyPassword ?: keystoreProperties.getProperty("keyPassword")
+            } else if (envStorePassword != null && envKeyPassword != null) {
+                // Fallback: env-only config, storeFile via CLAIRJOUR_STORE_FILE.
+                System.getenv("CLAIRJOUR_STORE_FILE")?.let { storeFile = file(it) }
+                storePassword = envStorePassword
+                keyAlias = System.getenv("CLAIRJOUR_KEY_ALIAS")
+                keyPassword = envKeyPassword
             }
         }
     }
@@ -126,6 +135,9 @@ dependencies {
 
     implementation(libs.androidx.glance.appwidget)
     implementation(libs.androidx.glance.material3)
+
+    implementation(libs.sqlcipher.android)
+    implementation(libs.androidx.security.crypto)
 
     coreLibraryDesugaring(libs.android.desugar.jdk.libs)
 

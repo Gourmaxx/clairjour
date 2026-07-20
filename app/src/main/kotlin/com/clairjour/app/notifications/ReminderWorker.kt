@@ -56,6 +56,13 @@ private fun showReminder(context: Context, channelId: String, title: String, bod
         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
 
+    // Public version shown on the lockscreen: no personal content, just app identity.
+    val publicVersion = NotificationCompat.Builder(context, channelId)
+        .setSmallIcon(R.drawable.ic_launcher_foreground)
+        .setContentTitle(context.getString(R.string.app_name))
+        .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+        .build()
+
     val notification = NotificationCompat.Builder(context, channelId)
         .setSmallIcon(R.drawable.ic_launcher_foreground)
         .setContentTitle(title)
@@ -63,6 +70,8 @@ private fun showReminder(context: Context, channelId: String, title: String, bod
         .setContentIntent(pending)
         .setAutoCancel(true)
         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        .setVisibility(NotificationCompat.VISIBILITY_SECRET)
+        .setPublicVersion(publicVersion)
         .build()
 
     NotificationManagerCompat.from(context).notify(notifId, notification)

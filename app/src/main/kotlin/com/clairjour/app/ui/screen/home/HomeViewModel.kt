@@ -11,9 +11,12 @@ import com.clairjour.app.data.repository.AddictionRepository
 import com.clairjour.app.data.repository.JournalRepository
 import com.clairjour.app.data.repository.PledgeRepository
 import com.clairjour.app.data.repository.RelapseRepository
+import com.clairjour.app.data.repository.RelapseSnapshot
 import com.clairjour.app.domain.Milestone
 import com.clairjour.app.domain.Milestones
 import com.clairjour.app.domain.Streak
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -104,13 +107,46 @@ class HomeViewModel(
         }
     }
 
-    fun reportRelapse(note: String?) {
+    // Undo pattern: relapse write is committed immediately so counter/streak update visibly.
+    // If the user taps "Undo" within 5s, we roll back via the snapshot. Otherwise, we
+    // just clear the pending snapshot after the delay.
+    private var pendingRelapseSnapshot: RelapseSnapshot? = null
+    private var relapseUndoJob: Job? = null
+
+    /**
+     * Reports a relapse and returns true if the write succeeded. When true, callers
+     * can offer an "Undo" action for up to 5s via [undoLastRelapse].
+     */
+    fun reportRelapse(note: String?, onUndoWindowOpen: () -> Unit = {}) {
         val current = uiState.value.current ?: return
         viewModelScope.launch {
             try {
-                relapseRepo.reportRelapse(current.id, note, emptyList())
+                val snapshot = relapseRepo.reportRelapse(current.id, note, emptyList())
+                if (snapshot != null) {
+                    pendingRelapseSnapshot = snapshot
+                    onUndoWindowOpen()
+                    relapseUndoJob?.cancel()
+                    relapseUndoJob = viewModelScope.launch {
+                        delay(5_000)
+                        // undo window expired
+                        pendingRelapseSnapshot = null
+                    }
+                }
             } catch (_: Exception) {
                 // relapse failure is silent
+            }
+        }
+    }
+
+    fun undoLastRelapse() {
+        val snapshot = pendingRelapseSnapshot ?: return
+        relapseUndoJob?.cancel()
+        pendingRelapseSnapshot = null
+        viewModelScope.launch {
+            try {
+                relapseRepo.undoRelapse(snapshot)
+            } catch (_: Exception) {
+                // undo failure is silent
             }
         }
     }

@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <data-extraction-rules>
+    <!--
+      Sensitive data (SQLCipher DB, DataStore, EncryptedSharedPreferences master secret).
+      Nothing must be shipped to Google's cloud backup nor to device transfer.
+    -->
     <cloud-backup>
-        <include domain="database" path="clairjour.db" />
-        <include domain="sharedpref" path="clairjour_prefs.xml" />
+        <exclude domain="database" path="clairjour.db" />
+        <exclude domain="database" path="clairjour.db-shm" />
+        <exclude domain="database" path="clairjour.db-wal" />
+        <exclude domain="sharedpref" path="clairjour_secure_prefs.xml" />
+        <exclude domain="sharedpref" path="clairjour_prefs.xml" />
+        <exclude domain="file" path="datastore/" />
     </cloud-backup>
     <device-transfer>
-        <include domain="database" path="clairjour.db" />
-        <include domain="sharedpref" path="clairjour_prefs.xml" />
+        <exclude domain="database" path="clairjour.db" />
+        <exclude domain="database" path="clairjour.db-shm" />
+        <exclude domain="database" path="clairjour.db-wal" />
+        <exclude domain="sharedpref" path="clairjour_secure_prefs.xml" />
+        <exclude domain="sharedpref" path="clairjour_prefs.xml" />
+        <exclude domain="file" path="datastore/" />
     </device-transfer>
 </data-extraction-rules>
