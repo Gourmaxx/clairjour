@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
@@ -237,6 +238,74 @@ fun AddictionEditScreen(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(stringResource(R.string.addiction_edit_primary), style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
                 Switch(checked = state.isPrimary, onCheckedChange = vm::setPrimary)
+            }
+
+            Spacer(Modifier.height(24.dp))
+
+            // Personal reasons section — displayed on CrisisScreen when a craving hits.
+            Text(
+                stringResource(R.string.addiction_edit_reasons_title),
+                style = MaterialTheme.typography.titleMedium
+            )
+            Spacer(Modifier.height(4.dp))
+            Text(
+                stringResource(R.string.addiction_edit_reasons_body),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Spacer(Modifier.height(12.dp))
+
+            state.personalReasons.forEachIndexed { index, reason ->
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
+                ) {
+                    Surface(
+                        shape = RoundedCornerShape(8.dp),
+                        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text(
+                            reason,
+                            style = MaterialTheme.typography.bodyMedium,
+                            modifier = Modifier.padding(12.dp)
+                        )
+                    }
+                    IconButton(onClick = { vm.removeReason(index) }) {
+                        Icon(
+                            Icons.Filled.Delete,
+                            contentDescription = stringResource(R.string.cd_delete),
+                            tint = MaterialTheme.colorScheme.error
+                        )
+                    }
+                }
+            }
+
+            var newReason by remember { mutableStateOf("") }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)
+            ) {
+                OutlinedTextField(
+                    value = newReason,
+                    onValueChange = { newReason = it },
+                    placeholder = { Text(stringResource(R.string.addiction_edit_reasons_hint)) },
+                    singleLine = true,
+                    modifier = Modifier.weight(1f)
+                )
+                IconButton(
+                    onClick = {
+                        if (newReason.isNotBlank()) {
+                            vm.addReason(newReason)
+                            newReason = ""
+                        }
+                    }
+                ) {
+                    Icon(
+                        Icons.Filled.Add,
+                        contentDescription = stringResource(R.string.addiction_edit_reasons_add)
+                    )
+                }
             }
 
             Spacer(Modifier.height(24.dp))

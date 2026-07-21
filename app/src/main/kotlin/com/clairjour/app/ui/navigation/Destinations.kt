@@ -10,6 +10,7 @@ object Destinations {
     const val STATS = "stats"
     const val SETTINGS = "settings"
     const val ADDICTION_EDIT = "addiction/edit?addictionId={addictionId}"
+    const val CRISIS = "crisis"
 
     fun journalEditor(date: LocalDate? = null) =
         if (date == null) "journal/editor" else "journal/editor?date=$date"

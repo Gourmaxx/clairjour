@@ -17,5 +17,8 @@ data class AddictionEntity(
     @ColumnInfo(name = "color_seed") val colorSeed: Int,
     @ColumnInfo(name = "is_primary") val isPrimary: Boolean,
     @ColumnInfo(name = "is_active") val isActive: Boolean,
-    @ColumnInfo(name = "created_at") val createdAt: Instant
+    @ColumnInfo(name = "created_at") val createdAt: Instant,
+    // Personal reasons ("why") shown on Home and in crisis moments. Empty by default.
+    @ColumnInfo(name = "personal_reasons", defaultValue = "[]")
+    val personalReasons: List<String> = emptyList()
 )

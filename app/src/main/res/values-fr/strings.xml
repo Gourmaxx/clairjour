@@ -76,6 +76,11 @@
     <string name="stats_total_saved">Total économisé</string>
     <string name="stats_milestones_reached">Jalons atteints</string>
     <string name="stats_mood_over_time">Humeur dans le temps</string>
+    <string name="stats_current_streak">Série actuelle</string>
+    <string name="stats_record_streak">Record</string>
+    <string name="stats_mood_avg_7d">Humeur · moy. 7j</string>
+    <string name="stats_mood_avg_30d">Humeur · moy. 30j</string>
+    <string name="stats_top_triggers">Déclencheurs récurrents · 30j</string>
 
     <string name="settings_title">Paramètres</string>
     <string name="settings_language">Langue</string>
@@ -160,6 +165,40 @@
     <!-- Feedback sauvegarde -->
     <string name="snack_addiction_saved">Domaine enregistré</string>
     <string name="snack_journal_saved">Entrée enregistrée</string>
+
+    <!-- Écran crise / panic -->
+    <string name="crisis_title">Respire</string>
+    <string name="crisis_intro">Tu es ici parce qu\'une envie t\'a rattrapé. C\'est OK — elle va passer. Respire avec le cercle, relis tes raisons, ou appelle.</string>
+    <string name="crisis_breathe">Respire</string>
+    <string name="crisis_reasons_title">Tes raisons</string>
+    <string name="crisis_contacts_title">Numéros d\'écoute (France)</string>
+    <string name="crisis_contact_3114_label">3114 · Ligne nationale prévention suicide</string>
+    <string name="crisis_contact_addiction_label">Drogues Info Service</string>
+    <string name="crisis_call">Appeler</string>
+    <string name="crisis_reminder">Tu l\'as déjà fait. Tu peux le refaire — une respiration à la fois.</string>
+    <string name="cd_crisis_fab">Ouvrir l\'aide en cas d\'envie</string>
+
+    <!-- Raisons personnelles -->
+    <string name="addiction_edit_reasons_title">Tes raisons (pourquoi)</string>
+    <string name="addiction_edit_reasons_body">Liste quelques raisons pour lesquelles tu veux rester sobre. Tu les reverras lors des moments difficiles.</string>
+    <string name="addiction_edit_reasons_add">Ajouter une raison</string>
+    <string name="addiction_edit_reasons_hint">ex. Être présent pour mes enfants</string>
+
+    <!-- États vides -->
+    <string name="stats_empty_mood">Écris ta première entrée pour voir ton humeur évoluer.</string>
+
+    <!-- Modal engagement -->
+    <string name="pledge_dialog_title">Engagement du jour</string>
+    <string name="pledge_dialog_body">Un engagement est une petite promesse quotidienne à toi-même : je reste sobre aujourd\'hui. Juste aujourd\'hui. Revenir chaque matin, c\'est toute la pratique.</string>
+
+    <!-- Filtres journal -->
+    <string name="journal_filter_mood">Humeur %1$d</string>
+    <string name="journal_filter_cravings">Envies</string>
+    <string name="journal_filter_clear">Effacer les filtres</string>
+
+    <!-- Sauvegarde auto -->
+    <string name="settings_auto_backup">Sauvegarde automatique hebdomadaire</string>
+    <string name="settings_auto_backup_body">Une copie chiffrée hebdomadaire stockée dans le dossier privé de l\'app. Réutilise la dernière phrase de passe utilisée à l\'export.</string>
 
     <!-- Dialog passphrase sauvegarde -->
     <string name="backup_passphrase_export_title">Chiffrer ta sauvegarde</string>

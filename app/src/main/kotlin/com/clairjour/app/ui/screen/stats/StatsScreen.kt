@@ -26,7 +26,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.clairjour.app.R
@@ -47,11 +49,20 @@ fun StatsScreen(
             StatsViewModel(
                 container.addictionRepository,
                 container.journalRepository,
-                container.milestoneDao
+                container.milestoneDao,
+                container.relapseDao
             )
         }
     )
     val state by vm.state.collectAsState()
+
+    // Map trigger DB keys → localized labels for display.
+    val triggerKeys = stringArrayResource(R.array.journal_trigger_keys)
+    val triggerLabels = stringArrayResource(R.array.journal_trigger_labels)
+    val labelForKey: (String) -> String = { key ->
+        val idx = triggerKeys.indexOf(key)
+        if (idx in triggerLabels.indices) triggerLabels[idx] else key
+    }
 
     Column(
         modifier = Modifier
@@ -63,6 +74,20 @@ fun StatsScreen(
     ) {
         Text(stringResource(R.string.stats_title), style = MaterialTheme.typography.headlineMedium)
         Spacer(Modifier.height(20.dp))
+
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
+            StatCard(
+                title = stringResource(R.string.stats_current_streak),
+                value = state.currentStreakDays.toString(),
+                modifier = Modifier.weight(1f)
+            )
+            StatCard(
+                title = stringResource(R.string.stats_record_streak),
+                value = state.recordStreakDays.toString(),
+                modifier = Modifier.weight(1f)
+            )
+        }
+        Spacer(Modifier.height(12.dp))
 
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
             StatCard(
@@ -85,10 +110,56 @@ fun StatsScreen(
         )
         Spacer(Modifier.height(24.dp))
 
+        // Mood section with 7d/30d averages when available.
         Text(stringResource(R.string.stats_mood_over_time), style = MaterialTheme.typography.titleMedium)
         Spacer(Modifier.height(8.dp))
+        if (state.moodAverage7d != null || state.moodAverage30d != null) {
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp), modifier = Modifier.fillMaxWidth()) {
+                state.moodAverage7d?.let {
+                    StatCard(
+                        title = stringResource(R.string.stats_mood_avg_7d),
+                        value = "%.1f".format(it),
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+                state.moodAverage30d?.let {
+                    StatCard(
+                        title = stringResource(R.string.stats_mood_avg_30d),
+                        value = "%.1f".format(it),
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
+            Spacer(Modifier.height(8.dp))
+        }
         MoodChart(points = state.recentMoodPoints)
         Spacer(Modifier.height(24.dp))
+
+        // Top triggers section (from the last 30 entries).
+        if (state.topTriggers.isNotEmpty()) {
+            Text(
+                stringResource(R.string.stats_top_triggers),
+                style = MaterialTheme.typography.titleMedium
+            )
+            Spacer(Modifier.height(10.dp))
+            state.topTriggers.forEach { tc ->
+                ClairjourCard(modifier = Modifier.fillMaxWidth().padding(vertical = 3.dp)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(labelForKey(tc.key), style = MaterialTheme.typography.bodyLarge)
+                        Text(
+                            "×${tc.count}",
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.secondary
+                        )
+                    }
+                }
+            }
+            Spacer(Modifier.height(24.dp))
+        }
 
         Text(stringResource(R.string.detail_milestones), style = MaterialTheme.typography.titleMedium)
         Spacer(Modifier.height(10.dp))
@@ -153,9 +224,11 @@ private fun MoodChart(points: List<Int>) {
     ClairjourCard(modifier = Modifier.fillMaxWidth()) {
         if (points.isEmpty()) {
             Text(
-                "—",
+                stringResource(R.string.stats_empty_mood),
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth().padding(vertical = 24.dp)
             )
         } else {
             Canvas(

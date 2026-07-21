@@ -25,7 +25,8 @@ data class AddictionBackup(
     val colorSeed: Int,
     val isPrimary: Boolean,
     val isActive: Boolean,
-    val createdAtMs: Long
+    val createdAtMs: Long,
+    val personalReasons: List<String> = emptyList()
 )
 
 @Serializable

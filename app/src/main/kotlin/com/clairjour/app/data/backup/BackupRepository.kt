@@ -116,7 +116,8 @@ class BackupRepository(
         id, name, type,
         startDate.toEpochMilliseconds(),
         costPerDay, unitPerDay, unitLabel, colorSeed, isPrimary, isActive,
-        createdAt.toEpochMilliseconds()
+        createdAt.toEpochMilliseconds(),
+        personalReasons
     )
 
     private fun JournalEntryEntity.toBackup() = JournalBackup(
@@ -142,7 +143,8 @@ class BackupRepository(
         id, name, type,
         Instant.fromEpochMilliseconds(startDateMs),
         costPerDay, unitPerDay, unitLabel, colorSeed, isPrimary, isActive,
-        Instant.fromEpochMilliseconds(createdAtMs)
+        Instant.fromEpochMilliseconds(createdAtMs),
+        personalReasons
     )
 
     private fun JournalBackup.toEntity() = JournalEntryEntity(

@@ -23,7 +23,8 @@ class AddictionRepository(private val dao: AddictionDao) {
         costPerDay: Double?,
         unitPerDay: Double?,
         unitLabel: String?,
-        isPrimary: Boolean
+        isPrimary: Boolean,
+        personalReasons: List<String> = emptyList()
     ): String {
         val id = UUID.randomUUID().toString()
         if (isPrimary) dao.clearPrimary()
@@ -39,7 +40,8 @@ class AddictionRepository(private val dao: AddictionDao) {
                 colorSeed = type.ordinal * 37,
                 isPrimary = isPrimary,
                 isActive = true,
-                createdAt = Clock.System.now()
+                createdAt = Clock.System.now(),
+                personalReasons = personalReasons
             )
         )
         return id

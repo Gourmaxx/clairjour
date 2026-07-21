@@ -350,6 +350,90 @@ private fun ToggleRow(label: String, checked: Boolean, onCheckedChange: (Boolean
     }
 }
 
+@Composable
+private fun PassphraseDialog(
+    titleRes: Int,
+    bodyRes: Int,
+    requireConfirm: Boolean,
+    onDismiss: () -> Unit,
+    onConfirmed: (CharArray) -> Unit
+) {
+    var passphrase by remember { mutableStateOf("") }
+    var confirmation by remember { mutableStateOf("") }
+    val mismatch = requireConfirm && confirmation.isNotEmpty() && passphrase != confirmation
+    val tooShort = requireConfirm && passphrase.isNotEmpty() && passphrase.length < 8
+    val canConfirm = passphrase.isNotEmpty() &&
+        (!requireConfirm || (!mismatch && !tooShort && confirmation.isNotEmpty()))
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(titleRes)) },
+        text = {
+            Column {
+                Text(
+                    stringResource(bodyRes),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(Modifier.height(12.dp))
+                OutlinedTextField(
+                    value = passphrase,
+                    onValueChange = { passphrase = it },
+                    label = { Text(stringResource(R.string.backup_passphrase_hint)) },
+                    visualTransformation = PasswordVisualTransformation(),
+                    singleLine = true,
+                    isError = tooShort,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                if (tooShort) {
+                    Text(
+                        stringResource(R.string.backup_passphrase_too_short),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+                if (requireConfirm) {
+                    Spacer(Modifier.height(8.dp))
+                    OutlinedTextField(
+                        value = confirmation,
+                        onValueChange = { confirmation = it },
+                        label = { Text(stringResource(R.string.backup_passphrase_confirm_hint)) },
+                        visualTransformation = PasswordVisualTransformation(),
+                        singleLine = true,
+                        isError = mismatch,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    if (mismatch) {
+                        Text(
+                            stringResource(R.string.backup_passphrase_mismatch),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    val chars = passphrase.toCharArray()
+                    passphrase = ""
+                    confirmation = ""
+                    onConfirmed(chars)
+                },
+                enabled = canConfirm
+            ) { Text(stringResource(R.string.action_confirm)) }
+        },
+        dismissButton = {
+            TextButton(onClick = {
+                passphrase = ""
+                confirmation = ""
+                onDismiss()
+            }) { Text(stringResource(R.string.action_cancel)) }
+        }
+    )
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun NotifTimeRow(hour: Int, minute: Int, onTimeChange: (Int, Int) -> Unit) {

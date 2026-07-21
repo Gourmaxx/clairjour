@@ -16,7 +16,7 @@ import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
         MilestoneReachedEntity::class,
         RelapseEventEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = true
 )
 @TypeConverters(Converters::class)
