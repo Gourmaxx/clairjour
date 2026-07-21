@@ -84,6 +84,11 @@
     <string name="stats_total_saved">Total saved</string>
     <string name="stats_milestones_reached">Milestones reached</string>
     <string name="stats_mood_over_time">Mood over time</string>
+    <string name="stats_current_streak">Current streak</string>
+    <string name="stats_record_streak">Record streak</string>
+    <string name="stats_mood_avg_7d">Mood · 7d avg</string>
+    <string name="stats_mood_avg_30d">Mood · 30d avg</string>
+    <string name="stats_top_triggers">Top triggers · 30 days</string>
 
     <!-- Settings -->
     <string name="settings_title">Settings</string>
@@ -172,6 +177,40 @@
     <!-- Save feedback -->
     <string name="snack_addiction_saved">Area saved</string>
     <string name="snack_journal_saved">Entry saved</string>
+
+    <!-- Crisis / panic screen -->
+    <string name="crisis_title">Take a breath</string>
+    <string name="crisis_intro">You\'re here because a craving hit. That\'s okay — it\'ll pass. Breathe with the circle, read your reasons, or reach out.</string>
+    <string name="crisis_breathe">Breathe</string>
+    <string name="crisis_reasons_title">Your reasons</string>
+    <string name="crisis_contacts_title">Help lines (France)</string>
+    <string name="crisis_contact_3114_label">3114 · National suicide-prevention line</string>
+    <string name="crisis_contact_addiction_label">Drogues Info Service</string>
+    <string name="crisis_call">Call</string>
+    <string name="crisis_reminder">You\'ve done it before. You can do it again — one breath at a time.</string>
+    <string name="cd_crisis_fab">Open crisis support</string>
+
+    <!-- Personal reasons -->
+    <string name="addiction_edit_reasons_title">Your reasons (why)</string>
+    <string name="addiction_edit_reasons_body">List a few reasons you want to stay sober. You\'ll see them again when a craving hits.</string>
+    <string name="addiction_edit_reasons_add">Add a reason</string>
+    <string name="addiction_edit_reasons_hint">e.g. Be present for my kids</string>
+
+    <!-- Empty states -->
+    <string name="stats_empty_mood">Write your first entry to see your mood evolve.</string>
+
+    <!-- Pledge modal -->
+    <string name="pledge_dialog_title">Today\'s pledge</string>
+    <string name="pledge_dialog_body">A pledge is a small daily promise to yourself: I stay sober today. Just today. Coming back every morning is the whole practice.</string>
+
+    <!-- Journal filters -->
+    <string name="journal_filter_mood">Mood %1$d</string>
+    <string name="journal_filter_cravings">Cravings</string>
+    <string name="journal_filter_clear">Clear filters</string>
+
+    <!-- Auto-backup -->
+    <string name="settings_auto_backup">Automatic weekly backup</string>
+    <string name="settings_auto_backup_body">A weekly encrypted copy stored in the app\'s private folder. Reuses your last export passphrase.</string>
 
     <!-- Backup passphrase dialog -->
     <string name="backup_passphrase_export_title">Encrypt your backup</string>

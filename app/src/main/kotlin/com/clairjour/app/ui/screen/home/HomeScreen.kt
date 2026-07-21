@@ -25,12 +25,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.WbSunny
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -83,7 +85,8 @@ fun HomeScreen(
     container: AppContainer,
     contentPadding: PaddingValues,
     onAddAddiction: () -> Unit,
-    onOpenJournalEditor: () -> Unit
+    onOpenJournalEditor: () -> Unit,
+    onOpenCrisis: () -> Unit
 ) {
     val vm: HomeViewModel = viewModel(
         factory = viewModelFactoryOf {
@@ -99,6 +102,7 @@ fun HomeScreen(
     )
     val state by vm.uiState.collectAsState()
     var showRelapseDialog by remember { mutableStateOf(false) }
+    var showPledgeDialog by remember { mutableStateOf(false) }
     var relapseNote by remember { mutableStateOf("") }
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
@@ -107,6 +111,22 @@ fun HomeScreen(
 
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
+        floatingActionButton = {
+            if (state.current != null) {
+                ExtendedFloatingActionButton(
+                    onClick = onOpenCrisis,
+                    containerColor = MaterialTheme.colorScheme.error,
+                    contentColor = MaterialTheme.colorScheme.onError,
+                    icon = {
+                        Icon(
+                            Icons.Filled.Favorite,
+                            contentDescription = stringResource(R.string.cd_crisis_fab)
+                        )
+                    },
+                    text = { Text(stringResource(R.string.crisis_breathe)) }
+                )
+            }
+        },
         containerColor = MaterialTheme.colorScheme.background
     ) { scaffoldPadding ->
     Box(modifier = Modifier.fillMaxSize().padding(scaffoldPadding)) {
@@ -155,7 +175,7 @@ fun HomeScreen(
                     Spacer(Modifier.height(24.dp))
                 }
 
-                PledgeCard(done = state.pledgeDone, onPledge = { vm.pledge() })
+                PledgeCard(done = state.pledgeDone, onPledge = { showPledgeDialog = true })
                 Spacer(Modifier.height(16.dp))
 
                 state.motivation?.let { motivation ->
@@ -200,6 +220,26 @@ fun HomeScreen(
                 )
             }
         }
+    }
+    }
+
+    if (showPledgeDialog) {
+        AlertDialog(
+            onDismissRequest = { showPledgeDialog = false },
+            title = { Text(stringResource(R.string.pledge_dialog_title)) },
+            text = { Text(stringResource(R.string.pledge_dialog_body)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    vm.pledge()
+                    showPledgeDialog = false
+                }) { Text(stringResource(R.string.home_pledge_cta)) }
+            },
+            dismissButton = {
+                TextButton(onClick = { showPledgeDialog = false }) {
+                    Text(stringResource(R.string.action_cancel))
+                }
+            }
+        )
     }
 
     if (showRelapseDialog) {

@@ -7,16 +7,18 @@ import com.clairjour.app.data.repository.JournalRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 
 data class JournalListUiState(
     val entries: List<JournalEntryEntity> = emptyList(),
-    val query: String = ""
+    val query: String = "",
+    val moodFilter: Int? = null,
+    val cravingsOnly: Boolean = false
 )
 
 class JournalViewModel(
@@ -24,14 +26,32 @@ class JournalViewModel(
 ) : ViewModel() {
 
     private val queryFlow = MutableStateFlow("")
+    private val moodFilterFlow = MutableStateFlow<Int?>(null)
+    private val cravingsFlow = MutableStateFlow(false)
 
     @OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
     val uiState: StateFlow<JournalListUiState> = queryFlow.flatMapLatest { q ->
-        val flow = if (q.isBlank()) repository.observeAll() else repository.search(q.trim())
-        flow.map { entries -> JournalListUiState(entries = entries, query = q) }
+        val baseFlow = if (q.isBlank()) repository.observeAll() else repository.search(q.trim())
+        combine(baseFlow, moodFilterFlow, cravingsFlow) { entries, mood, cravings ->
+            val filtered = entries
+                .let { list -> if (mood != null) list.filter { it.mood == mood } else list }
+                .let { list -> if (cravings) list.filter { it.hadCravings } else list }
+            JournalListUiState(
+                entries = filtered,
+                query = q,
+                moodFilter = mood,
+                cravingsOnly = cravings
+            )
+        }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), JournalListUiState())
 
     fun setQuery(q: String) { queryFlow.value = q }
+    fun setMoodFilter(mood: Int?) { moodFilterFlow.value = mood }
+    fun setCravingsOnly(v: Boolean) { cravingsFlow.value = v }
+    fun clearFilters() {
+        moodFilterFlow.value = null
+        cravingsFlow.value = false
+    }
 
     fun delete(id: String) {
         viewModelScope.launch { repository.delete(id) }

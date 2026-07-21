@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.clairjour.app.data.AppContainer
 import com.clairjour.app.ui.screen.addiction.AddictionEditScreen
+import com.clairjour.app.ui.screen.crisis.CrisisScreen
 import com.clairjour.app.ui.screen.home.HomeScreen
 import com.clairjour.app.ui.screen.journal.JournalEditorScreen
 import com.clairjour.app.ui.screen.journal.JournalScreen
@@ -43,7 +44,14 @@ fun ClairjourNavHost(
                 container = container,
                 contentPadding = contentPadding,
                 onAddAddiction = { navController.navigate(Destinations.addictionEdit()) },
-                onOpenJournalEditor = { navController.navigate(Destinations.journalEditor()) }
+                onOpenJournalEditor = { navController.navigate(Destinations.journalEditor()) },
+                onOpenCrisis = { navController.navigate(Destinations.CRISIS) }
+            )
+        }
+        composable(Destinations.CRISIS) {
+            CrisisScreen(
+                container = container,
+                onDone = { navController.popBackStack() }
             )
         }
         composable(Destinations.JOURNAL) {

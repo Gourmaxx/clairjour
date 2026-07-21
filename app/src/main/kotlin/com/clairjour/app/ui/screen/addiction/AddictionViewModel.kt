@@ -19,6 +19,7 @@ data class AddictionEditUiState(
     val unitPerDay: String = "",
     val unitLabel: String = "",
     val isPrimary: Boolean = false,
+    val personalReasons: List<String> = emptyList(),
     val loaded: Boolean = false
 )
 
@@ -44,6 +45,7 @@ class AddictionEditViewModel(
                         unitPerDay = entity.unitPerDay?.toString() ?: "",
                         unitLabel = entity.unitLabel.orEmpty(),
                         isPrimary = entity.isPrimary,
+                        personalReasons = entity.personalReasons,
                         loaded = true
                     )
                 } else {
@@ -66,6 +68,22 @@ class AddictionEditViewModel(
     }
     fun setUnitLabel(v: String) { _state.value = _state.value.copy(unitLabel = v) }
     fun setPrimary(v: Boolean) { _state.value = _state.value.copy(isPrimary = v) }
+
+    fun addReason(reason: String) {
+        val trimmed = reason.trim()
+        if (trimmed.isEmpty()) return
+        _state.value = _state.value.copy(
+            personalReasons = _state.value.personalReasons + trimmed
+        )
+    }
+
+    fun removeReason(index: Int) {
+        val current = _state.value.personalReasons.toMutableList()
+        if (index in current.indices) {
+            current.removeAt(index)
+            _state.value = _state.value.copy(personalReasons = current)
+        }
+    }
 
     fun delete(onDone: () -> Unit) {
         val existing = _state.value.existing ?: return
@@ -91,7 +109,8 @@ class AddictionEditViewModel(
                         costPerDay = s.costPerDay.replace(',', '.').toDoubleOrNull(),
                         unitPerDay = s.unitPerDay.replace(',', '.').toDoubleOrNull(),
                         unitLabel = s.unitLabel.ifBlank { null },
-                        isPrimary = s.isPrimary
+                        isPrimary = s.isPrimary,
+                        personalReasons = s.personalReasons
                     )
                 } else {
                     addictionRepository.update(
@@ -102,7 +121,8 @@ class AddictionEditViewModel(
                             costPerDay = s.costPerDay.replace(',', '.').toDoubleOrNull(),
                             unitPerDay = s.unitPerDay.replace(',', '.').toDoubleOrNull(),
                             unitLabel = s.unitLabel.ifBlank { null },
-                            isPrimary = s.isPrimary
+                            isPrimary = s.isPrimary,
+                            personalReasons = s.personalReasons
                         )
                     )
                 }
