@@ -29,6 +29,9 @@ interface MilestoneDao {
     @Query("SELECT * FROM milestones_reached")
     suspend fun getAll(): List<MilestoneReachedEntity>
 
+    @Query("SELECT * FROM milestones_reached WHERE addiction_id = :addictionId")
+    suspend fun getFor(addictionId: String): List<MilestoneReachedEntity>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(entities: List<MilestoneReachedEntity>)
 

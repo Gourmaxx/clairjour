@@ -149,7 +149,11 @@ fun JournalScreen(
                         SwipeableEntry(
                             entry = entry,
                             onClick = { onOpenEditor(entry.date) },
-                            onSwipedToDelete = { pendingDeleteId = entry.id }
+                            onSwipedToDelete = {
+                                // Guard against re-triggers when the state briefly
+                                // transitions during LaunchedEffect reset.
+                                if (pendingDeleteId == null) pendingDeleteId = entry.id
+                            }
                         )
                     }
                 }

@@ -86,7 +86,7 @@ fun HomeScreen(
     contentPadding: PaddingValues,
     onAddAddiction: () -> Unit,
     onOpenJournalEditor: () -> Unit,
-    onOpenCrisis: () -> Unit
+    onOpenCrisis: (String?) -> Unit
 ) {
     val vm: HomeViewModel = viewModel(
         factory = viewModelFactoryOf {
@@ -114,7 +114,7 @@ fun HomeScreen(
         floatingActionButton = {
             if (state.current != null) {
                 ExtendedFloatingActionButton(
-                    onClick = onOpenCrisis,
+                    onClick = { onOpenCrisis(state.current?.id) },
                     containerColor = MaterialTheme.colorScheme.error,
                     contentColor = MaterialTheme.colorScheme.onError,
                     icon = {
@@ -130,17 +130,15 @@ fun HomeScreen(
         containerColor = MaterialTheme.colorScheme.background
     ) { scaffoldPadding ->
     Box(modifier = Modifier.fillMaxSize().padding(scaffoldPadding)) {
+        // Single-screen layout: no vertical scroll. Content compressed so everything fits
+        // on standard phone heights (~700dp usable). BrandBadge dropped, spacers reduced.
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background)
                 .padding(contentPadding)
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 20.dp, vertical = 12.dp)
+                .padding(horizontal = 20.dp, vertical = 8.dp)
         ) {
-            ClairjourBrandBadge(modifier = Modifier.align(Alignment.CenterHorizontally))
-            Spacer(Modifier.height(20.dp))
-
             if (state.addictions.size > 1) {
                 LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     items(state.addictions, key = { it.id }) { addiction ->
@@ -152,7 +150,7 @@ fun HomeScreen(
                         )
                     }
                 }
-                Spacer(Modifier.height(20.dp))
+                Spacer(Modifier.height(8.dp))
             }
 
             val current = state.current
@@ -160,7 +158,7 @@ fun HomeScreen(
                 EmptyState(onAdd = onAddAddiction)
             } else {
                 CounterBlock(addiction = current, startDate = current.startDate)
-                Spacer(Modifier.height(24.dp))
+                Spacer(Modifier.height(12.dp))
 
                 state.nextMilestone?.let { next ->
                     val remaining = (next.days - state.streakDays).coerceAtLeast(0)
@@ -172,22 +170,24 @@ fun HomeScreen(
                         ),
                         progress = state.progressToNext
                     )
-                    Spacer(Modifier.height(24.dp))
+                    Spacer(Modifier.height(12.dp))
                 }
 
                 PledgeCard(done = state.pledgeDone, onPledge = { showPledgeDialog = true })
-                Spacer(Modifier.height(16.dp))
+                Spacer(Modifier.height(8.dp))
 
                 state.motivation?.let { motivation ->
                     MotivationCard(motivation.textFor(LocalConfiguration.current.locales[0].language))
-                    Spacer(Modifier.height(16.dp))
+                    Spacer(Modifier.height(8.dp))
                 }
 
                 JournalQuickCard(
                     written = state.journalWrittenToday,
                     onOpen = onOpenJournalEditor
                 )
-                Spacer(Modifier.height(24.dp))
+
+                // Push the relapse text button to the very bottom.
+                Spacer(Modifier.weight(1f))
 
                 TextButton(
                     onClick = { showRelapseDialog = true },
@@ -199,7 +199,6 @@ fun HomeScreen(
                         style = MaterialTheme.typography.labelLarge
                     )
                 }
-                Spacer(Modifier.height(24.dp))
             }
         }
 
@@ -264,10 +263,12 @@ fun HomeScreen(
                     val note = relapseNote.ifBlank { null }
                     vm.reportRelapse(note) {
                         coroutineScope.launch {
+                            // Long ≈ 10s: comfortably wider than the VM's 5s undo window,
+                            // so the user always sees the action before it expires.
                             val result = snackbarHostState.showSnackbar(
                                 message = relapseRecordedText,
                                 actionLabel = relapseUndoText,
-                                duration = androidx.compose.material3.SnackbarDuration.Short
+                                duration = androidx.compose.material3.SnackbarDuration.Long
                             )
                             if (result == SnackbarResult.ActionPerformed) {
                                 vm.undoLastRelapse()
@@ -406,15 +407,15 @@ private fun CounterBlock(
     ) {
         Text(
             text = addiction.name.ifBlank { stringResource(type.labelRes) },
-            style = MaterialTheme.typography.titleMedium,
+            style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(8.dp))
 
         Text(
             text = elapsedDays.toString(),
             style = MaterialTheme.typography.displayLarge.copy(
-                fontSize = 128.sp,
+                fontSize = 108.sp,
                 fontWeight = FontWeight.Light
             ),
             color = MaterialTheme.colorScheme.onBackground
@@ -426,11 +427,11 @@ private fun CounterBlock(
             color = MaterialTheme.colorScheme.secondary,
             fontWeight = FontWeight.Medium
         )
-        Spacer(Modifier.height(16.dp))
+        Spacer(Modifier.height(12.dp))
 
         Text(
             text = "%dh %02dm %02ds".format(hours, minutes, seconds),
-            style = MaterialTheme.typography.headlineMedium,
+            style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Light,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -455,7 +456,7 @@ private fun PledgeCard(done: Boolean, onPledge: () -> Unit) {
                 containerColor = MaterialTheme.colorScheme.secondary,
                 contentColor = MaterialTheme.colorScheme.onSecondary
             ),
-            modifier = Modifier.fillMaxWidth().height(56.dp)
+            modifier = Modifier.fillMaxWidth().height(64.dp)
         ) {
             Text(
                 stringResource(R.string.home_pledge_cta),

@@ -12,11 +12,13 @@ data class CrisisUiState(
 )
 
 /**
- * Feeds [CrisisScreen] with the user's personal reasons pulled from their primary or first
- * active addiction. Kept read-only intentionally — the crisis screen is not the place to edit.
+ * Feeds [CrisisScreen] with the "why" of a specific addiction — the one the user was
+ * looking at when they tapped the crisis FAB. If [scopedAddictionId] is null, falls back
+ * to the primary (or any) active addiction so the screen still works from cold entry.
  */
 class CrisisViewModel(
-    private val addictionRepository: AddictionRepository
+    private val addictionRepository: AddictionRepository,
+    private val scopedAddictionId: String? = null
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(CrisisUiState())
@@ -25,8 +27,10 @@ class CrisisViewModel(
     init {
         viewModelScope.launch {
             addictionRepository.observeActive().collect { addictions ->
-                val primary = addictions.firstOrNull { it.isPrimary } ?: addictions.firstOrNull()
-                _state.value = CrisisUiState(reasons = primary?.personalReasons.orEmpty())
+                val target = scopedAddictionId?.let { id -> addictions.firstOrNull { it.id == id } }
+                    ?: addictions.firstOrNull { it.isPrimary }
+                    ?: addictions.firstOrNull()
+                _state.value = CrisisUiState(reasons = target?.personalReasons.orEmpty())
             }
         }
     }

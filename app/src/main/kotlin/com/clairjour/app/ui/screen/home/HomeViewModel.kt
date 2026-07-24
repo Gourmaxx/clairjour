@@ -123,13 +123,16 @@ class HomeViewModel(
             try {
                 val snapshot = relapseRepo.reportRelapse(current.id, note, emptyList())
                 if (snapshot != null) {
+                    // Cancel any pending expiration before rebinding — avoids a stale
+                    // job from a previous relapse nulling the fresh snapshot.
+                    relapseUndoJob?.cancel()
                     pendingRelapseSnapshot = snapshot
                     onUndoWindowOpen()
-                    relapseUndoJob?.cancel()
                     relapseUndoJob = viewModelScope.launch {
                         delay(5_000)
-                        // undo window expired
-                        pendingRelapseSnapshot = null
+                        // Only clear if the snapshot is still ours (defensive: another
+                        // report may have replaced it in the meantime).
+                        if (pendingRelapseSnapshot === snapshot) pendingRelapseSnapshot = null
                     }
                 }
             } catch (_: Exception) {

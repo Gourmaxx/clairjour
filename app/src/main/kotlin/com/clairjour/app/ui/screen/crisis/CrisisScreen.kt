@@ -57,10 +57,14 @@ import com.clairjour.app.ui.components.viewModelFactoryOf
 @Composable
 fun CrisisScreen(
     container: AppContainer,
+    addictionId: String?,
     onDone: () -> Unit
 ) {
     val vm: CrisisViewModel = viewModel(
-        factory = viewModelFactoryOf { CrisisViewModel(container.addictionRepository) }
+        key = addictionId ?: "primary",
+        factory = viewModelFactoryOf {
+            CrisisViewModel(container.addictionRepository, addictionId)
+        }
     )
     val state by vm.state.collectAsState()
     val context = LocalContext.current

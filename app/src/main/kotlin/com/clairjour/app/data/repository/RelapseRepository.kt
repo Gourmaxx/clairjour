@@ -2,6 +2,7 @@ package com.clairjour.app.data.repository
 
 import com.clairjour.app.data.db.AddictionDao
 import com.clairjour.app.data.db.MilestoneDao
+import com.clairjour.app.data.db.MilestoneReachedEntity
 import com.clairjour.app.data.db.RelapseDao
 import com.clairjour.app.data.db.RelapseEventEntity
 import com.clairjour.app.domain.Streak
@@ -22,7 +23,7 @@ class RelapseRepository(
 
     /**
      * Reports a relapse: inserts a RelapseEvent, clears milestones, and resets the streak.
-     * Returns the previous start date so callers can restore it if the user undoes the action.
+     * Returns a snapshot with everything needed to fully undo the write within a grace window.
      */
     suspend fun reportRelapse(
         addictionId: String,
@@ -35,6 +36,7 @@ class RelapseRepository(
         val today: LocalDate = now.toLocalDateTime(zone).date
         val previousStreak = Streak.daysSince(addiction.startDate, now)
         val previousStart = addiction.startDate
+        val previousMilestones = milestoneDao.getFor(addictionId)
 
         if (relapseDao.countForDate(addictionId, today) > 0) return null
 
@@ -51,21 +53,29 @@ class RelapseRepository(
         )
         milestoneDao.clearFor(addictionId)
         addictionDao.resetStart(addictionId, now)
-        return RelapseSnapshot(relapseId = relapseId, addictionId = addictionId, previousStart = previousStart)
+        return RelapseSnapshot(
+            relapseId = relapseId,
+            addictionId = addictionId,
+            previousStart = previousStart,
+            previousMilestones = previousMilestones
+        )
     }
 
     /**
-     * Undoes a previous relapse: deletes the RelapseEvent and restores the addiction start date.
-     * Milestones cleared by reportRelapse are NOT restored (they will be recomputed by the domain).
+     * Undoes a previous relapse: restores start date, deletes the RelapseEvent, and
+     * reinstates the milestones cleared on report — so the celebration overlay doesn't
+     * flash again for milestones the user had already dismissed.
      */
     suspend fun undoRelapse(snapshot: RelapseSnapshot) {
-        relapseDao.deleteById(snapshot.relapseId)
         addictionDao.resetStart(snapshot.addictionId, snapshot.previousStart)
+        snapshot.previousMilestones.forEach { milestoneDao.insert(it) }
+        relapseDao.deleteById(snapshot.relapseId)
     }
 }
 
 data class RelapseSnapshot(
     val relapseId: String,
     val addictionId: String,
-    val previousStart: kotlinx.datetime.Instant
+    val previousStart: kotlinx.datetime.Instant,
+    val previousMilestones: List<MilestoneReachedEntity> = emptyList()
 )

@@ -45,12 +45,23 @@ fun ClairjourNavHost(
                 contentPadding = contentPadding,
                 onAddAddiction = { navController.navigate(Destinations.addictionEdit()) },
                 onOpenJournalEditor = { navController.navigate(Destinations.journalEditor()) },
-                onOpenCrisis = { navController.navigate(Destinations.CRISIS) }
+                onOpenCrisis = { addictionId ->
+                    navController.navigate(Destinations.crisis(addictionId))
+                }
             )
         }
-        composable(Destinations.CRISIS) {
+        composable(
+            route = Destinations.CRISIS,
+            arguments = listOf(navArgument("addictionId") {
+                type = NavType.StringType
+                nullable = true
+                defaultValue = null
+            })
+        ) { backStackEntry ->
+            val addictionId = backStackEntry.arguments?.getString("addictionId")
             CrisisScreen(
                 container = container,
+                addictionId = addictionId,
                 onDone = { navController.popBackStack() }
             )
         }

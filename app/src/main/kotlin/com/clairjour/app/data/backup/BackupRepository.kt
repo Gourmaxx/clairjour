@@ -82,6 +82,24 @@ class BackupRepository(
         }
         enforceRowLimits(data)
 
+        // Convert first, outside the transaction, so any parse error surfaces as a typed
+        // BackupCorruptException without leaving the DB in a partially-wiped state.
+        val addictions = try {
+            data.addictions.map { it.toEntity() }
+        } catch (e: Exception) { throw BackupCorruptException("Malformed addiction data", e) }
+        val journalEntries = try {
+            data.journalEntries.map { it.toEntity() }
+        } catch (e: Exception) { throw BackupCorruptException("Malformed journal date", e) }
+        val pledges = try {
+            data.pledges.map { it.toEntity() }
+        } catch (e: Exception) { throw BackupCorruptException("Malformed pledge date", e) }
+        val milestones = try {
+            data.milestones.map { it.toEntity() }
+        } catch (e: Exception) { throw BackupCorruptException("Malformed milestone data", e) }
+        val relapses = try {
+            data.relapseEvents.map { it.toEntity() }
+        } catch (e: Exception) { throw BackupCorruptException("Malformed relapse date", e) }
+
         db.withTransaction {
             db.addictionDao().deleteAll()
             db.journalDao().deleteAll()
@@ -89,11 +107,11 @@ class BackupRepository(
             db.milestoneDao().deleteAll()
             db.relapseDao().deleteAll()
 
-            data.addictions.map { it.toEntity() }.also { db.addictionDao().insertAll(it) }
-            data.journalEntries.map { it.toEntity() }.also { db.journalDao().insertAll(it) }
-            data.pledges.map { it.toEntity() }.also { db.pledgeDao().insertAll(it) }
-            data.milestones.map { it.toEntity() }.also { db.milestoneDao().insertAll(it) }
-            data.relapseEvents.map { it.toEntity() }.also { db.relapseDao().insertAll(it) }
+            db.addictionDao().insertAll(addictions)
+            db.journalDao().insertAll(journalEntries)
+            db.pledgeDao().insertAll(pledges)
+            db.milestoneDao().insertAll(milestones)
+            db.relapseDao().insertAll(relapses)
         }
     }
 

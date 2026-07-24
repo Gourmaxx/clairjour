@@ -35,6 +35,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -66,11 +67,24 @@ import com.clairjour.app.data.AppContainer
 import com.clairjour.app.data.prefs.AppLanguage
 import com.clairjour.app.data.prefs.LocaleManager
 import com.clairjour.app.domain.AddictionType
+import com.clairjour.app.notifications.ReminderScheduler
 import com.clairjour.app.ui.components.viewModelFactoryOf
 import kotlinx.datetime.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+
+/**
+ * Guards the "sober since" date picker: users can pick today or earlier, never
+ * the future — which would freeze the counter until the chosen day arrives.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+private object PastOrTodayDates : SelectableDates {
+    override fun isSelectableDate(utcTimeMillis: Long): Boolean =
+        utcTimeMillis <= System.currentTimeMillis()
+    override fun isSelectableYear(year: Int): Boolean =
+        year <= java.time.Year.now().value
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -93,9 +107,17 @@ fun OnboardingScreen(
     var unitLabel by rememberSaveable { mutableStateOf("") }
     var startDateMs by rememberSaveable { mutableLongStateOf(OnboardingViewModel.defaultStart().toEpochMilliseconds()) }
 
+    val context = androidx.compose.ui.platform.LocalContext.current
     val notifPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
-    ) { /* result ignored — proceed either way */ }
+    ) { granted ->
+        // Always schedule when user opted in: WorkManager will fire and the OS will
+        // drop the notification silently if permission was refused. If the user later
+        // grants it, the workers are already running.
+        if (granted) {
+            ReminderScheduler.schedule(context, 8, 0, 21, 0)
+        }
+    }
 
     val submit: () -> Unit = {
         vm.finish(
@@ -161,7 +183,11 @@ fun OnboardingScreen(
                 3 -> NotifStep(
                     onEnable = {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            // Scheduling happens inside the launcher callback (see above).
                             notifPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                        } else {
+                            // No runtime permission on API < 33 → schedule immediately.
+                            ReminderScheduler.schedule(context, 8, 0, 21, 0)
                         }
                     }
                 )
@@ -311,7 +337,10 @@ private fun AddictionStep(
     val optionalSuffix = " " + stringResource(R.string.field_optional_suffix)
 
     if (showDatePicker) {
-        val datePickerState = rememberDatePickerState(initialSelectedDateMillis = startDateMs)
+        val datePickerState = rememberDatePickerState(
+            initialSelectedDateMillis = startDateMs,
+            selectableDates = PastOrTodayDates
+        )
         DatePickerDialog(
             onDismissRequest = { showDatePicker = false },
             confirmButton = {

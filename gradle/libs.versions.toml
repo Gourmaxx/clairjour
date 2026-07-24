@@ -31,6 +31,8 @@ securityCrypto = "1.1.0-alpha06"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
+mockk = "1.13.13"
+archCoreTesting = "2.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -80,6 +82,8 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 androidx-room-testing = { group = "androidx.room", name = "room-testing", version.ref = "room" }
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+androidx-arch-core-testing = { group = "androidx.arch.core", name = "core-testing", version.ref = "archCoreTesting" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

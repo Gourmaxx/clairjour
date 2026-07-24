@@ -31,6 +31,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -62,6 +63,15 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
+/** Prevents users from selecting a future "sober since" date on edit. */
+@OptIn(ExperimentalMaterial3Api::class)
+private object PastOrTodayDatesEdit : SelectableDates {
+    override fun isSelectableDate(utcTimeMillis: Long): Boolean =
+        utcTimeMillis <= System.currentTimeMillis()
+    override fun isSelectableYear(year: Int): Boolean =
+        year <= java.time.Year.now().value
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddictionEditScreen(
@@ -83,7 +93,8 @@ fun AddictionEditScreen(
 
     if (showDatePicker) {
         val datePickerState = rememberDatePickerState(
-            initialSelectedDateMillis = state.startDate.toEpochMilliseconds()
+            initialSelectedDateMillis = state.startDate.toEpochMilliseconds(),
+            selectableDates = PastOrTodayDatesEdit
         )
         DatePickerDialog(
             onDismissRequest = { showDatePicker = false },

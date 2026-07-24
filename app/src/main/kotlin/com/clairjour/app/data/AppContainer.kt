@@ -29,7 +29,7 @@ class DefaultAppContainer(context: Context) : AppContainer {
 
     override val settingsRepository = SettingsRepository(context.applicationContext)
     override val motivationsRepository = MotivationsRepository(context.applicationContext)
-    override val addictionRepository = AddictionRepository(db.addictionDao())
+    override val addictionRepository = AddictionRepository(db.addictionDao(), db.milestoneDao())
     override val journalRepository = JournalRepository(db.journalDao())
     override val pledgeRepository = PledgeRepository(db.pledgeDao())
     override val relapseRepository = RelapseRepository(

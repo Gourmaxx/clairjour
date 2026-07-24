@@ -5,6 +5,8 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.clairjour.app.security.DatabasePassphraseProvider
 import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
 
@@ -48,10 +50,21 @@ abstract class ClairjourDatabase : RoomDatabase() {
         }
 
         /**
-         * Migration strategy: v0.1.0 is pre-release, so we accept destructive migrations.
-         * When SQLCipher is introduced on top of an existing plaintext DB, Room will fail
-         * to open the file (bad magic) and the fallback wipes local data. Users are asked
-         * to re-onboard. Encrypted backups (see BackupCrypto) allow restoring history.
+         * v1 → v2 adds the `personal_reasons` column on `addictions`. Preserves user data.
+         */
+        private val MIGRATION_1_2 = object : Migration(1, 2) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    "ALTER TABLE addictions ADD COLUMN personal_reasons TEXT NOT NULL DEFAULT '[]'"
+                )
+            }
+        }
+
+        /**
+         * Migration strategy:
+         *  - v1 → v2 : real ALTER, no data loss.
+         *  - Legacy plaintext DB opened with SQLCipher key : falls back to destructive
+         *    (bad-magic on read); users must re-onboard OR restore from an encrypted backup.
          */
         fun get(context: Context): ClairjourDatabase =
             instance ?: synchronized(this) {
@@ -68,6 +81,7 @@ abstract class ClairjourDatabase : RoomDatabase() {
                 DB_NAME
             )
                 .openHelperFactory(factory)
+                .addMigrations(MIGRATION_1_2)
                 .fallbackToDestructiveMigration()
                 .build()
         }
