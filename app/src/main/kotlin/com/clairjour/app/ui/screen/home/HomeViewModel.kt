@@ -20,8 +20,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
@@ -70,7 +72,6 @@ class HomeViewModel(
                 milestoneDao.observeFor(current.id)
             ) { pledge, journalToday, milestones ->
                 val days = Streak.daysSince(current.startDate)
-                checkAndInsertMilestones(current.id, days)
                 HomeUiState(
                     loading = false,
                     addictions = list,
@@ -90,6 +91,25 @@ class HomeViewModel(
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = HomeUiState()
     )
+
+    init {
+        // Milestone auto-insertion runs in its OWN pipeline, driven by (addiction.id,
+        // addiction.startDate). Mixing this write into the combine above caused a race:
+        // when reportRelapse fired, `observeFor(milestones)` could emit an empty list
+        // *before* `observeActive` emitted the new startDate — resulting in
+        // `days = 40, milestones = []` → re-inserting all past milestones as unseen.
+        viewModelScope.launch {
+            addictionRepo.observeActive()
+                .map { list -> list.firstOrNull { it.id == selectedIdFlow.value } ?: list.firstOrNull() }
+                .distinctUntilChanged { a, b -> a?.id == b?.id && a?.startDate == b?.startDate }
+                .collect { current ->
+                    if (current != null) {
+                        val days = Streak.daysSince(current.startDate)
+                        if (days > 0) checkAndInsertMilestones(current.id, days)
+                    }
+                }
+        }
+    }
 
     fun select(id: String) {
         selectedIdFlow.value = id

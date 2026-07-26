@@ -33,9 +33,11 @@ class DefaultAppContainer(context: Context) : AppContainer {
     override val journalRepository = JournalRepository(db.journalDao())
     override val pledgeRepository = PledgeRepository(db.pledgeDao())
     override val relapseRepository = RelapseRepository(
+        db,
         db.relapseDao(),
         db.milestoneDao(),
-        db.addictionDao()
+        db.addictionDao(),
+        db.pledgeDao()
     )
     override val milestoneDao = db.milestoneDao()
     override val relapseDao = db.relapseDao()

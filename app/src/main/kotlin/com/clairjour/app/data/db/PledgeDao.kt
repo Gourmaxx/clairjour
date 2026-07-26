@@ -12,6 +12,12 @@ interface PledgeDao {
     @Query("SELECT * FROM pledges WHERE addiction_id = :addictionId AND date = :date LIMIT 1")
     fun observeFor(addictionId: String, date: LocalDate): Flow<PledgeEntity?>
 
+    @Query("SELECT * FROM pledges WHERE addiction_id = :addictionId AND date = :date LIMIT 1")
+    suspend fun getFor(addictionId: String, date: LocalDate): PledgeEntity?
+
+    @Query("DELETE FROM pledges WHERE addiction_id = :addictionId AND date = :date")
+    suspend fun deleteFor(addictionId: String, date: LocalDate)
+
     @Query("SELECT COUNT(*) FROM pledges WHERE addiction_id = :addictionId")
     fun countFor(addictionId: String): Flow<Int>
 

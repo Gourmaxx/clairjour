@@ -1,7 +1,7 @@
 # Clairjour — SUIVI.md
 
 ## 🧭 Ligne directrice
-**État** (2026-07-21) : Chantier de refonte v0.2 terminé ✅. Sécurité renforcée (backup chiffré AES-GCM + SQLCipher + notifs privées + import transactionnel), UX critique complétée (suppression addiction/journal, accessibilité TalkBack, undo rechute, onboarding flexible, i18n déclencheurs), et features clés livrées (Panic button/CrisisScreen, raisons personnelles, stats enrichies, filtres journal, dialogs pédagogiques). Build debug OK (~46 Mo — SQLCipher inclus). Prochaine étape : installer/tester sur téléphone + relancer build release signé + préparer publication Play Store.
+**État** (2026-07-26, v1.0.0-beta) : Bêta 1.0 taggée après un round complet de bug-fixes issu d'un audit multi-profils. Corrections critiques : `StatsViewModel.recordStreak` collecte enfin les relapses (record = max(current, historicalMax)) ; migration Room v1→v2 non-destructive ; Snackbar undo rechute aligné sur 5s (durée `Long`) ; race condition fixée (report/undo relapse désormais atomiques via `withTransaction` + pipeline milestones sorti du `combine`) ; onboarding schedule les notifs sur consent ; DatePicker bloque le futur ; backfill n'affiche plus de cascade d'overlays ; pledge du jour nettoyé lors d'une rechute (et restauré à l'undo) ; messages d'erreur backup granulaires ; Crisis screen scopé sur l'addiction courante via navigation. Tests unitaires : BackupCrypto (7), Streak (4), JournalViewModel (2). Build debug OK. Prochaine étape : test device + build release signé + publication.
 
 ## ✅ Fait (v0.1 + v0.2)
 ### v0.1 initial

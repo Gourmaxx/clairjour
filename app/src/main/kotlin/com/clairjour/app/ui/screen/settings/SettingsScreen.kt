@@ -127,12 +127,20 @@ fun SettingsScreen(
     val importSuccess = stringResource(R.string.backup_import_success)
     val exportError = stringResource(R.string.backup_export_error)
     val importError = stringResource(R.string.backup_import_error)
+    val badPassphrase = stringResource(R.string.backup_passphrase_bad)
+    val corruptError = stringResource(R.string.backup_import_corrupt)
+    val tooLarge = stringResource(R.string.backup_import_too_large)
+    val unsupported = stringResource(R.string.backup_import_error)
     LaunchedEffect(state.backupStatus) {
         val msg = when (state.backupStatus) {
             BackupStatus.SUCCESS_EXPORT -> exportSuccess
             BackupStatus.SUCCESS_IMPORT -> importSuccess
             BackupStatus.ERROR_EXPORT -> exportError
             BackupStatus.ERROR_IMPORT -> importError
+            BackupStatus.ERROR_BAD_PASSPHRASE -> badPassphrase
+            BackupStatus.ERROR_CORRUPT -> corruptError
+            BackupStatus.ERROR_UNSUPPORTED_VERSION -> unsupported
+            BackupStatus.ERROR_TOO_LARGE -> tooLarge
             else -> null
         }
         if (msg != null) {
