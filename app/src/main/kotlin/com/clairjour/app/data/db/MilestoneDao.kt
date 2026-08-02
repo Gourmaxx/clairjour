@@ -23,6 +23,9 @@ interface MilestoneDao {
     @Query("UPDATE milestones_reached SET seen_by_user = 1 WHERE id = :id")
     suspend fun markSeen(id: String)
 
+    @Query("UPDATE milestones_reached SET seen_by_user = 1 WHERE addiction_id = :addictionId")
+    suspend fun markAllSeenFor(addictionId: String)
+
     @Query("DELETE FROM milestones_reached WHERE addiction_id = :addictionId")
     suspend fun clearFor(addictionId: String)
 

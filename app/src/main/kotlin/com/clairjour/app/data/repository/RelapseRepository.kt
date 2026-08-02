@@ -30,7 +30,8 @@ class RelapseRepository(
     /**
      * Reports a relapse atomically:
      *  1. inserts the RelapseEvent (with prior streak baked in)
-     *  2. clears milestones for this addiction
+     *  2. marks existing milestones as seen (kept as history so re-reached milestones
+     *     do not pop the celebration overlay again — `insert IGNORE` will skip them)
      *  3. wipes today's pledge (a broken pledge should not linger as "kept ✓")
      *  4. resets the addiction start date to now
      *
@@ -67,7 +68,7 @@ class RelapseRepository(
                     previousStreakDays = previousStreak
                 )
             )
-            milestoneDao.clearFor(addictionId)
+            milestoneDao.markAllSeenFor(addictionId)
             pledgeDao.deleteFor(addictionId, today)
             addictionDao.resetStart(addictionId, now)
         }
@@ -88,7 +89,10 @@ class RelapseRepository(
     suspend fun undoRelapse(snapshot: RelapseSnapshot) {
         db.withTransaction {
             addictionDao.resetStart(snapshot.addictionId, snapshot.previousStart)
-            snapshot.previousMilestones.forEach { milestoneDao.insert(it) }
+            // REPLACE (not IGNORE) so seenByUser is restored to its pre-relapse value —
+            // reportRelapse now flips existing rows to seen=true, so a plain insert
+            // would be ignored and leave them incorrectly marked as seen.
+            milestoneDao.insertAll(snapshot.previousMilestones)
             snapshot.previousPledge?.let { pledgeDao.insert(it) }
             relapseDao.deleteById(snapshot.relapseId)
         }

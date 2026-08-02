@@ -21,3 +21,15 @@
 -keepclasseswithmembers class com.clairjour.app.** {
     kotlinx.serialization.KSerializer serializer(...);
 }
+
+# Tink (androidx.security.crypto) references JSR-305 annotations we don't ship.
+-dontwarn javax.annotation.**
+-dontwarn javax.annotation.concurrent.**
+
+# SQLCipher (net.zetetic) native + reflection surface — keep everything.
+-keep class net.zetetic.database.** { *; }
+-dontwarn net.zetetic.database.**
+
+# Tink internals accessed via reflection.
+-keep class com.google.crypto.tink.** { *; }
+-dontwarn com.google.crypto.tink.**
